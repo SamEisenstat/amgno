@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Search Omegle Conversations - Omegrep</title>
+		<meta name="description" content="Search Omegle conversations.">
+		<link href="css/bootstrap.min.css" rel="stylesheet">	
+		<link href="css/style.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="wrapper">
+			<div class="header">
+				<h3 class="slogan">Search Omegle Conversations</h3>
+			</div>
+			<div class="title">
+				<h1><span class="omegle">ome</span>grep</h1>
+			</div>
+			<div class="buttons">
+				<div class="input-append">
+				  <input class="span6" id="appendedInputButton" size="16" type="text"><button class="btn btn-warning" type="button">Go!</button>
+				</div>
+				<button class="btn">Random</button>
+				<button class="btn">Top</button>
+				
+				
+				<div class="push"></div>
+			</div>
+		</div>
+		<div class="footer">
+				<div class="modal fade" id="info-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none">
+				  <div class="modal-header">
+				    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+				    <h3 id="myModalLabel"><span class="logo-ome">Ome</span><span class="logo-grep">grep</span> FAQ</h3>
+				  </div>
+				  <div class="modal-body">
+				  	<ul>
+				  		<li><a href="#Q1">What is Omegrep?</a></li>
+				  		<li><a href="#Q2">Are you affiliated with Omegle?</a></li>
+				  		<li><a href="#Q3">How did you get these chat logs?</a></li>
+				  		<li><a href="#Q4">Why isn't my chat log showing up in search?</a></li>
+				  		<li><a href="#Q5">Why is the text in search results wrong sometimes?</a></li>
+				  		<li><a href="#Q6">Why did you create this?</a></li>
+				  		<li><a href="#Q7">Did you "hack" Omegle?</a></li>
+				  		<li><a href="#Q8">How do I get a chat log removed?</a></li>
+				  		<li><a href="#Q9">What does Omegrep's name mean?</a></li>
+				  		<li><a href="#Q10">How can I contact you?</a></li>
+				  	</ul>
+				  	<hr>
+				  	<div id="Q1">
+				  		<h4>What is Omegrep?</h4>
+				  		<p>Omegrep helps you find interesting chat logs from <a href="http://www.omegle.com" target="_blank">Omegle.com</a>.</p>
+				  	</div>
+				  	<div id="Q2">
+				  		<h4>Are you affiliated with Omegle?</h4>
+				  		<p>Omegrep is <strong>not</strong> affiliated with Omegle in any way.</p>
+				  	</div>
+				  	<div id="Q3">
+				  		<h4>How did you get these chat logs?</h4>
+				  		<p>All saved logs are publicly available on Omegle.com. Simply visit logs.omegle.com/#####, replacing ##### with any 5, 6 or 7 digit hexadecimal number. Some numbers will give you a 403 error, but most will not. Here is an <a href="http://logs.omegle.com/f7b7344" target="_blank">example</a>.</p>
+				  	</div>
+				  	<div id="Q4">
+				  		<h4>Why isn't my chat log showing up in search?</h4>
+				  		<p>Theres a lot of logs out there, so unfortunately it may take us some time to get to yours. We have plans to add the ability to "submit" a chat log. <a href="mailto:hello@omegrep.com">Send us an email</a> to hurry us up if you'd be interested in that.</p>
+				  	</div>
+				  	<div id="Q5">
+				  		<h4>Why is the text in search results wrong sometimes?</h4>
+				  		<p>Omegle saves logs as images, so we have to get the computer to "read" the images into text files. Reading screenshots is hard for computers, and sometimes he makes mistakes. Please forgive him!</p>
+				  	</div>
+				  	<div id="Q6">
+				  		<h4>Why did you create this?</h4>
+				  		<p>For practice and entertainment.</p>
+				  	</div>
+				  	<div id="Q7">
+				  		<h4>Did you "hack" Omegle?</h4>
+				  		<p>We did not hack Omegle. All the information used on this website is publicly available on Omegle.com. We simply organized it. See <a href="#Q3"> Question 3 </a> for more details.</p>
+				  	</div>
+				  	<div id="Q8">
+				  		<h4>How do I get a chat log removed?</h4>
+				  		<p>If you find a chat log containing your personal information, or links to to something illegal or horrific, let us know via <a href="mailto:hello@omegrep.com">email</a> or the report button and we will remove it ASAP. Unfortunately, removing it from here does not remove it from Omegle's servers, so we'd recommend contacting Omegle, and generally not giving your personal information to strangers on the internet.</p>
+				  	</div>
+				  	<div id="Q9">
+				  		<h4>What does Omegrep's name mean?</h4>
+				  		<p>Omegrep is a combination of "Omegle" and "<a href="http://en.wikipedia.org/wiki/Grep" target="_blank">grep</a>", a command line utility used for searching through text.</p>
+				  	</div>	  	
+				  	<div id="Q10">
+				  		<h4>How can I contact you?</h4>
+				  		<p>Email us about anything at all at <a href="mailto:hello@omegrep.com">hello@omegrep.com.</a></p>
+				  	</div>
+				  </div>
+				  <div class="modal-footer">
+				    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+				  </div>
+				</div>
+				
+				<a class="info-button">What is this?</a>
+				<span class="bullet">&#8226;</span>
+				<a href="mailto:hello@omegrep.com">Contact</a>
+				<h5>Omegrep is not affiliated with Omegle in any way.</h5>
+		</div>		
+		<script src="js/jquery-1.8.1.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/app.js"></script>
+	</body>
+</html>

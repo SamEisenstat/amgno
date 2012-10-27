@@ -1,0 +1,13 @@
+<%= link_to 'Omegrep', root_path %>
+<%= link_to 'Random', random_path %>
+
+<h1> Chat logs! </h1>
+
+<% @logs.each do |log| %>
+  <div class="log">
+    <%# Get rid of the http by putting better data in the database %>
+    <%= image_tag 'http://'+log.url %>
+    <%= link_to 'http://'+log.public_url, 'http://'+log.public_url %>
+  </div>
+<% end %>
+
