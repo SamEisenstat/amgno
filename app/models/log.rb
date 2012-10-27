@@ -11,7 +11,14 @@ class Log < ActiveRecord::Base
   end
 
   def self.get_random(n)
-#, :order => method(:rand), :limit => 10
+    #Log.find :all, :order => method(:rand), :limit => 10
     Log.find(:all).sample(n)
+  end
+
+  def self.search(text, n)
+    if text
+      find :all, :conditions => ['url LIKE ?', "%#{text}%"], :limit => n
+    else []
+    end
   end
 end

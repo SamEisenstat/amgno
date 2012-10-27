@@ -1,4 +1,4 @@
 Omegrep::Application.routes.draw do
-  root :to => 'log#home'
-  match 'random' => 'log#random'
+  root :to => 'logs#home'
+  resources :logs
 end

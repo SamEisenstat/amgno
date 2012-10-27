@@ -1,8 +1,16 @@
 <%= link_to 'Omegrep', root_path %>
-<%= link_to 'Random', random_path %>
+<%= link_to 'Random', logs_path(:random => true) %>
+
+<form accept-charset="UTF-8" action="/logs" method="get">
+  <p>
+    <%= text_field_tag :search, params[:search] %>
+    <%= submit_tag "Search", :name => nil %>
+  </p>
+</form>
 
 <h1> Chat logs! </h1>
 
+<% puts "logs: ", @logs.length %>
 <% @logs.each do |log| %>
   <div class="log">
     <%# Get rid of the http by putting better data in the database %>
@@ -10,4 +18,3 @@
     <%= link_to 'http://'+log.public_url, 'http://'+log.public_url %>
   </div>
 <% end %>
-
