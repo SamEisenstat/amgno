@@ -1,20 +1,42 @@
-<%= link_to 'Omegrep', root_path %>
-<%= link_to 'Random', logs_path(:random => true) %>
-
-<form accept-charset="UTF-8" action="/logs" method="get">
-  <p>
-    <%= text_field_tag :search, params[:search] %>
-    <%= submit_tag "Search", :name => nil %>
-  </p>
-</form>
-
-<h1> Chat logs! </h1>
-
-<% puts "logs: ", @logs.length %>
-<% @logs.each do |log| %>
-  <div class="log">
-    <%# Get rid of the http by putting better data in the database %>
-    <%= image_tag 'http://'+log.url %>
-    <%= link_to 'http://'+log.public_url, 'http://'+log.public_url %>
-  </div>
-<% end %>
+<div class="wrapper">
+	<%= render "shared/navbar" %>
+	<div class="container">
+		<div class="instructions">
+			<span>Use <i class="icon-arrow-up"></i> and <i class="icon-arrow-down"></i> to navigate chats.</span>
+		</div>
+		<hr class="results-divider"> <%# note that results-divider is different from item-divider %>
+		<ul>
+			<% @logs.each do |log| %>
+				<li class="results-item">
+					<div class="row">
+						<div class="span6 offset1 img-polaroid">
+							<%= image_tag log.url, :width => "500", :class => "chat-file" %>
+						</div>
+						<div class="span3 control-container">
+							<div class="span3 controls">
+								<div class="voting">
+									<div class="span1 up-section">
+										<div class="up"></div>
+										<span><%= log.upvotes %></span>
+									</div>
+									<div class="span1 down-section">
+										<div class="down"></div>
+										<span><%= log.downvotes %></span>
+									</div>
+								</div>
+								<div class="chat-link">
+									<label>Link to this chat</label>
+									<input type="text" value="<%= log.public_url %>">
+								</div>
+								<div class="report-chat"><i class="icon-flag flag-chat"></i>Report Chat</div>
+							</div>
+						</div>
+					</div>
+				</li>
+				<hr class="item-divider">
+			<% end %>
+		</ul>
+	</div>
+	<div class="push"></div>
+	<%= render "shared/footer" %>
+</div>

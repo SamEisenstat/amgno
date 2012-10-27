@@ -1,4 +1,4 @@
 Omegrep::Application.routes.draw do
-  root :to => 'logs#home'
+  root :to => 'logs#index'
   resources :logs
 end

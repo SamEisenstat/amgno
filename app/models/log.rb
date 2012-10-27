@@ -1,5 +1,6 @@
 class Log < ActiveRecord::Base
-  attr_accessible :reported, :transcript, :url, :public_url
+  attr_accessible :reported, :transcript, :url, :public_url,
+    :upvotes, :downvotes
 
   validates :url, :uniqueness => true
 
@@ -8,6 +9,8 @@ class Log < ActiveRecord::Base
   def init
     self.reported = false if reported.nil?
     self.public_url = url if public_url.nil?
+    self.upvotes = 0      if upvotes.nil?
+    self.downvotes = 0    if downvotes.nil?
   end
 
   def self.get_random(n)

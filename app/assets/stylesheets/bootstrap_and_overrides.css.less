@@ -1,5 +1,5 @@
 @import "twitter/bootstrap/bootstrap";
-@import "twitter/bootstrap/responsive";
+/*@import "twitter/bootstrap/responsive";*/
 
 // Set the correct sprite paths
 @iconSpritePath: asset-path("twitter/bootstrap/glyphicons-halflings.png");
@@ -8,13 +8,13 @@
 // Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
 // Note: If you use asset_path() here, your compiled boostrap_and_overrides.css will not
 //       have the proper paths. So for now we use the absolute path.
-@fontAwesomeEotPath: asset-path("fontawesome-webfont.eot");
+/*@fontAwesomeEotPath: asset-path("fontawesome-webfont.eot");
 @fontAwesomeWoffPath: asset-path("fontawesome-webfont.woff");
 @fontAwesomeTtfPath: asset-path("fontawesome-webfont.ttf");
 @fontAwesomeSvgPath: asset-path("fontawesome-webfont.svg");
 
 // Font Awesome
-@import "fontawesome";
+@import "fontawesome";*/
 
 // Your custom LESS stylesheets goes here
 //
@@ -26,3 +26,36 @@
 //
 // Example:
 // @linkColor: #ff0000;
+
+@navbarHeight:                    55px;
+@navbarBackgroundHighlight:       #ffffff;
+@navbarBackground:                @white;
+@navbarBorder:                    darken(@navbarBackground, 12%);
+
+@navbarText:                      #777;
+@navbarLinkColor:                 #777;
+@navbarLinkColorHover:            @grayDark;
+@navbarLinkColorActive:           @gray;
+@navbarLinkBackgroundHover:       transparent;
+@navbarLinkBackgroundActive:      darken(@navbarBackground, 5%);
+
+@navbarBrandColor:                @navbarLinkColor;
+
+// Inverted navbar
+@navbarInverseBackground:                darken(@navbarInverseBackgroundHighlight, 10%);
+@navbarInverseBackgroundHighlight:       #1d8cfe;
+@navbarInverseBorder:                    darken(@navbarInverseBackground, 4%);
+
+@navbarInverseText:                      @grayLight;
+@navbarInverseLinkColor:                 #BADEFF;
+@navbarInverseLinkColorHover:            @white;
+@navbarInverseLinkColorActive:           @navbarInverseLinkColorHover;
+@navbarInverseLinkBackgroundHover:       transparent;
+@navbarInverseLinkBackgroundActive:      @navbarInverseBackground;
+
+@navbarInverseSearchBackground:          @white;
+@navbarInverseSearchBackgroundFocus:     @white;
+@navbarInverseSearchBorder:              @navbarInverseBackground;
+@navbarInverseSearchPlaceholderColor:    #ccc;
+
+@navbarInverseBrandColor:                @navbarInverseLinkColor;
