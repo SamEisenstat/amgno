@@ -11,8 +11,11 @@ class Log < ActiveRecord::Base
   end
 
   def self.get_random(n)
-    #Log.find :all, :order => method(:rand), :limit => 10
-    Log.find(:all).sample(n)
+    Log.find :all, :order => 'random()', :limit => 10
+    # This is platform-dependent. See http://www.petefreitag.com/item/466.cfm
+    # for alternate versions. There's also the following line, which has worse
+    # performance, but works everywhere.
+    # Log.find(:all).sample(n)
   end
 
   def self.search(text, n)
