@@ -8,8 +8,8 @@ def seed_logs
 """
 # ActiveRecord::Base.connection().execute("BEGIN;
 record = """
-log = Log.find_or_create_by_url(:url => 'http://l.omegle.com/{0}')
-log.update_attributes :public_url => 'http://logs.omegle.com/{1}',
+log = Log.find_or_create_by_url(:url => '{0}')
+log.update_attributes :public_url => '{1}',
   :transcript => '{2}'
 puts count += 1
 """
@@ -34,12 +34,13 @@ def make_seeds(folder):
     
     files = os.listdir(folder)
     for file_ in files:
+      print file_
       match_object = re.match('^(.*)\.png$', file_)
       if match_object != None:
         base_name = match_object.group(1)
         try:
-          with open(folder + base_name + '.txt.fixed') as f:
-            transcript = f.read()
+          with open(folder+'/'+base_name+'.txt.fixed') as f:
+            transcript = f.read().replace("'", '"')
         except:
           transcript = ''
         seed_logs.write(record.format('http://l.omegle.com/'+file_,
