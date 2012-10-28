@@ -1,16 +1,17 @@
 <div class="navbar navbar-fixed-top navbar-inverse">
 	<div class="navbar-inner">
 		<div class="container">
-			<a class="brand nav-logo" href="#"><div class="omegreplogo"></div></a>
+		  <%= link_to root_path, :class => "brand nav-logo" do %><div class="omegreplogo"></div><% end %>
 			<ul class="nav">
 				<li class="divider-vertical"></li>    
 				<li><a href="#">Top</a></li>  
 				<li class="divider-vertical"></li>    
-				<li><a href="#">Random</a></li>
+				<li><%= link_to "Random", root_url %></li>
 				<li class="divider-vertical"></li>    
 
-				<form class="navbar-search pull-left">
-					<input type="text" class="search-query span4" placeholder="Search Omegle Logs">
+				<form <%= root_path %> class="navbar-search pull-left" method="get">
+					<%= text_field_tag :search, params[:search], :class => "search-query span4", :placeholder => params[:search] || "Search Omegle Logs" %>
+					<%# input type="text" class="search-query span4" placeholder="Search Omegle Logs"%>
 				</form>
 
 			</ul>

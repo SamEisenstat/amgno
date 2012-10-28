@@ -23,7 +23,7 @@ class Log < ActiveRecord::Base
 
   def self.search(text, n)
     if text
-      find :all, :conditions => ['url LIKE ?', "%#{text}%"], :limit => n
+      find :all, :conditions => ['transcript LIKE ?', "%#{text}%"], :limit => n
     else []
     end
   end
