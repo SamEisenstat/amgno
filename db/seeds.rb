@@ -25,7 +25,7 @@ Dir.glob('../test/*.png').each_slice(100) do |slice|
           transcript = nil
         end
         log = Log.new :url => 'http://l.omegle.com/'+base_name+'.png',
-          :public_url => 'http://l.omegle.com/'+base_name,
+          :public_url => 'http://logs.omegle.com/'+base_name,
           :transcript => transcript
         log.save
       end
