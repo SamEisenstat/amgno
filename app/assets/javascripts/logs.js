@@ -130,7 +130,7 @@ $(window).load(function(){
 	//taking into account the navbar. For arrow key traversing.
 	function bottomInView(image){     
 		imageBottom = image.offset().top + image.height();  
-		documentScroll = document.body.scrollTop;
+		documentScroll = $(window).scrollTop();
 		if(imageBottom - documentScroll >= navbarHeight){
 			return true;
 		}			
@@ -143,7 +143,7 @@ $(window).load(function(){
 	//taking into account the navbar. For arrow key traversing.
 	function topInView(image){     
 		imageTop = image.offset().top; 
-		documentScroll = document.body.scrollTop;
+		documentScroll = $(window).scrollTop();
 		if(imageTop - documentScroll >= navbarHeight){
 			return true;
 		}			
