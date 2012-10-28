@@ -158,6 +158,13 @@ $(window).load(function(){
 		document.getElementById('image-contain').scrollTop = 0;
 	})
 
+	//Popover for direct link in the search page
+	$('#direct-link').clickover().click(function(){
+		$('.popover input').click(function(){
+			$(this).select();
+		});
+	});
+	
 	//When you click a specific result snippet in the search page.
 	//This is for when you already have this picture selected.
 	//Would need another for when you have to load the new image first.
