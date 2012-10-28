@@ -99,11 +99,11 @@ $(window).load(function(){
 	    
 	    var code = (e.keyCode ? e.keyCode : e.which);
 	    var tops = [];
-	    var topImgInView = $('.chat-file:in-viewport:first');
+	    var topImgInView = $('.row:in-viewport:first'); //set to row instead of img to prevent issues with images that are smaller than the controller
 
 	    if (code == 38) { //up
 	    	e.preventDefault();
-	    	if (topImgInView.is($('.chat-file:first')) && topInView(topImgInView)){ //if you push up and you're on the top of the top image
+	    	if (topImgInView.is($('.row:first')) && topInView(topImgInView)){ //if you push up and you're on the top of the top image
 	    		$('html,body').scrollTop(0);
 	    	}
 	    	else{ //otherwise, behave normally
@@ -113,7 +113,7 @@ $(window).load(function(){
 	     }
 	    if (code == 40) { //down
 	    	e.preventDefault();
-	    	if (document.body.scrollTop < $('.results-divider').offset().top - navbarHeight){ //if user hasn't scrolled past the first chat
+	    	if ($(window).scrollTop() < $('.results-divider').offset().top - navbarHeight){ //if user hasn't scrolled past the first chat
 	    		$('html,body').scrollTop($('.results-divider').offset().top-navbarHeight);
 	    	}
 	    	else if (bottomInView(topImgInView)){
