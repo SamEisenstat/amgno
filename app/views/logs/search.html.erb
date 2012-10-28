@@ -1,0 +1,17 @@
+<%= render "shared/navbar" %>
+<div class="container no-overflow top-20 eighty">
+	<div class="span5 search-controls" id="search-controls-contain">
+		<div class="search-results-title">We found <%= @logs.length %> chats mentioning <%= params[:search]%></span></div>
+		<% @logs.each do |log| %>
+			<div class="search-control-item selected">
+				<% log.matches.each do |match| %>
+					<blockquote><a data-linenumber="<%= matches.line%>">"<%= matches.text %>"</a></blockquote>
+				<% end %>
+			</div>
+			<% if matches.length > 10 %>
+				<a class="more"> <%= matches.length - 10 %> more from this chat</a>
+			<% end %>
+		<% end %>
+	</div>
+</div>
+<%= render "shared/footer" %>
