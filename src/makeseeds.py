@@ -3,15 +3,28 @@ import re
 
 header = """
 def seed_logs
+  count = 0
+  ActiveRecord::Base.transaction do
 """
+# ActiveRecord::Base.connection().execute("BEGIN;
 record = """
-log = Log.find_or_create_by_url(:url => 'l.omegle.com/{0}')
-log.public_url = 'logs.omegle.com/{1}'
-log.save
+log = Log.find_or_create_by_url(:url => 'http://l.omegle.com/{0}')
+log.update_attributes :public_url => 'http://logs.omegle.com/{1}',
+  :transcript => '{2}'
+puts count += 1
 """
+#"""
+#IF (SELECT COUNT(*) FROM logs WHERE url = '{0}') != 0
+#  UPDATE logs SET public_url = '{1}' WHERE url = '{0}'
+#ELSE
+#  INSERT INTO logs (url, public_url, transcript, reported, upvotes, downvotes)
+#            VALUES ('{0}', '{1}', '{2}', 0, 0, 0);
+#"""
 footer = """
+  end
 end
 """
+# COMMIT TRANSACTION;")
 
 srcdir = os.path.dirname(os.path.abspath(__file__))
 
@@ -24,9 +37,13 @@ def make_seeds(folder):
       match_object = re.match('^(.*)\.png$', file_)
       if match_object != None:
         base_name = match_object.group(1)
-        if False:
-          actually = handle.the('ocr').d(text)
-        seed_logs.write(record.format(file_, base_name))
+        try:
+          with open(folder + base_name + '.txt.fixed') as f:
+            transcript = f.read()
+        except:
+          transcript = ''
+        seed_logs.write(record.format('http://l.omegle.com/'+file_,
+          'http://logs.omegle.com/'+base_name, transcript))
 
     seed_logs.write(footer)
 
