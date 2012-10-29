@@ -19,11 +19,8 @@ Dir.glob('../test/*.png').each_slice(100) do |slice|
     slice.each do |file|
       base_name = file.base_name
       unless logs.include?(base_name)
-        begin
-          transcript = IO.read(file.match(/(.*)\.png/)[1]+'.txt.fixed')
-        rescue
-          transcript = nil
-        end
+        transcript = (IO.read(file.match(/(.*)\.png/)[1]+'.txt.fixed')
+                       rescue nil)
         log = Log.new :url => 'http://l.omegle.com/'+base_name+'.png',
           :public_url => 'http://logs.omegle.com/'+base_name,
           :transcript => transcript
