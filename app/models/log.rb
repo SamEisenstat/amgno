@@ -21,9 +21,9 @@ class Log < ActiveRecord::Base
     # Log.find(:all).sample(n)
   end
 
-  def self.search(text, n)
-    if text
-      find :all, :conditions => ['transcript LIKE ?', "%#{text}%"], :limit => n
+  def self.search(phrase, n)
+    if phrase
+      find :all, :conditions => ['transcript LIKE ?', "%#{phrase}%"], :limit => n
     else []
     end
   end

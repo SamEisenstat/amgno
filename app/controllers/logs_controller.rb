@@ -1,12 +1,9 @@
 class LogsController < ApplicationController
   def index
     if params[:search]
+      #TODO AJAX
       @logs = Log.search params[:search], 10
-      #TODO fix
-      if params[:search] == "search"
-        @logs = []
-        render :search
-      end
+      render :search
     else
       @logs = Log.get_random 10
     end
