@@ -1,9 +1,10 @@
 <%= render "shared/navbar" %>
+
 <div class="container no-overflow top-20 eighty">
 	<div class="span5 search-controls" id="search-controls-contain">
 		<div class="search-results-title">We found <%= pluralize @logs.length, 'chat' %> mentioning <%= params[:search] %></div>
 		<% max_matches = 10 %>
-		<% @logs[0...10].each do |log| %>
+		<% @logs[0...max_matches].each do |log| %>
 			<% matches = matches(log.transcript, params[:search]) %>
 			<div class="search-control-item">
 				<% matches[0...max_matches].each do |match| %>
@@ -15,5 +16,31 @@
 			<% end %>
 		<% end %>
 	</div>
+
+	<%# FIXME %>
+	<% log = @logs[0] %>
+	<div class="span6 img-polaroid image-container" id="image-contain">
+		<div class="image-controls">
+			<div class="span1 up-section search-vote">
+				<div class="up"></div>
+				<span><%= log.upvotes %></span>
+			</div>
+			<div class="span1 down-section search-vote">
+				<div class="down"></div>
+				<span><%= log.downvotes %></span>
+			</div>
+			<div class="other-controls">
+				<a id="top-of-chat">Top of chat</a>
+				<span class="bullet">&#8226;</span>
+				<a id="direct-link" data-content="<input type='text' value='<%= log.public_url %>'>" data-placement="bottom">Direct Link</a> 
+				<span class="bullet">&#8226;</span>
+				<i class="icon-flag flag-chat"></i>
+			</div>
+		</div>
+		<div class="image-padding">
+			<img src="<%= log.url %>" width="500px" alt=""/>
+		</div>
+	</div>	
 </div>
+
 <%= render "shared/footer" %>
