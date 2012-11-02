@@ -1,29 +1,29 @@
-maxDefaultHeight = 400; //max height of an image before expansion
-headerHeight = 74; //the thing that says Omegle, talk to strangers, etc.
-lineHeight = 26; //text is 15px, linespacing is 15px, -4 cause in practice it seems more accurate
-moreshit = false; //this is just for making the load-on-scroll stuff happen only once in testing purposes
+//maxDefaultHeight = 400; //max height of an image before expansion
+//headerHeight = 74; //the thing that says Omegle, talk to strangers, etc.
+//lineHeight = 26; //text is 15px, linespacing is 15px, -4 cause in practice it seems more accurate
+//moreshit = false; //this is just for making the load-on-scroll stuff happen only once in testing purposes
 navbarHeight = 55;
 stickyControllers = [];
 
 $(window).load(function(){
-	//Add a bunch of callbacks to keep each sticky element in the right place
-	$('.controls').each(function(){ 
-		var footer = $(this).parents('.results-item').next('.item-divider');
-		initSticky($(this), footer);
-	});
-
 	//Initialize Modals
 	$('.info-button').click(function() {
 		$('#info-modal').modal('show');
 	});
 
-	$('.flag-chat, .report-chat').click(function(){ //flag-chat is just the flag on the search page, .report-chat is the whole div on the top/random page
+	//flag-chat is just the flag on the search page, .report-chat is the whole div on the top/random page
+	$('.results-container').on('click', '.flag-chat, .report-chat', function(){ 
 		$('#flag-modal').modal('show');
 	});
 
 	//Thanks you for submitting flag, needs to happen after flag is actaully sent
 	$('#submit-flag').click(function(){
 		$('.submit-flag-alert').fadeIn(200);
+	});
+
+	//Removes the "thank you" message after the modal is dismissed.
+	$('.modal-dismiss').click(function(){
+		$('.submit-flag-alert').fadeOut(0);
 	});
 
 	//Fixes bug on search page where clicking to an anchor in the info modal made the page scroll.
@@ -44,92 +44,86 @@ $(window).load(function(){
 	});
 	
 	//for vote button clicking
-	$('.up-section, .down-section').click(function(){ 
+	$('.results-container').on('click', '.up-section, .down-section', function(){ 
 		$(this).toggleClass('pressed');
 		if ($(this).siblings('.span1').hasClass('pressed')) {$(this).siblings('.span1').toggleClass('pressed')};
 	});
 
 	//To make the chat url box select on click
-	$('.chat-link input').click(function(){
+	$('.results-container').on('click', '.chat-link input', function(){
 		$(this).select();
 	});
 
-	//Registers a callback that keeps the given sticky in its correct position
-	function initSticky(sticky, footer){
-		var stickyTop = sticky.offset().top; 
-		var footerTop = footer.offset().top; 
-		var stickyHeight = sticky.height();
-		var limit = footerTop - stickyHeight - 15;
-		stickyControllers.push(function(){
-			var padding = navbarHeight + 15;
-			var windowTop = $(window).scrollTop();
-			  
-			if (stickyTop < windowTop + padding){
-			   sticky.css({ position: 'fixed', top: padding });
-			}
-			else {
-			   sticky.css('position','static');
-			}
-			  
-			if (limit < windowTop + padding) {
-				var diff = limit - windowTop;
-				sticky.css({top: diff});
-			}     
-		});
-	}
-
 	$(window).scroll(function() {
 		//Gives the callbacks to the window scroll event
-		for (var index in stickyControllers){
-			stickyControllers[index]();
-		}
+		$('.controls').each(function() {
+			var footer = $(this).parents('.results-item').next('.item-divider');
+			var stickyTop = $(this).parents('.control-container').offset().top; 
+			var footerTop = footer.offset().top; 
+			var stickyHeight = $(this).height();
+			var limit = footerTop - stickyHeight - 15;
+			var padding = navbarHeight + 15;
+			var windowTop = $(window).scrollTop();
+
+			if (stickyTop < windowTop + padding){
+				$(this).css({ position: 'fixed', top: padding });
+			}
+			else {
+				$(this).css('position','static');
+			}
+
+			if (limit < windowTop + padding) {
+				var diff = limit - windowTop;
+				$(this).css({top: diff});
+			} 
+		});
 
 		//For continuous scrolling
-		//Needs ajax, right now just adds a div when you hit the bottom
-		//The "moreshit" flag is purely for this demonstration, so that it only does it once
-	    if ($('body').height() <= ($(window).height() + $(window).scrollTop()) && moreshit==false) {
-		     $('.item-divider:last').after('<div class="results" style="display: none; padding-top:0"><span> Loading more shit</span></div><hr>');
-		     $('.results:last').delay('400').fadeIn('slow');
-		     moreshit=true;
-	    }
+		if ($(document).height() <= ($(window).height() + $(window).scrollTop())
+				&& $('.results').length == 0) {
+			$('.item-divider:last').after('<div class="results" style="display: none; padding-top: 0"><span> Loading more shit</span></div>').fadeIn(200);
+			$.get('logs/more', function(data) {
+				$('.results').remove();
+				$('.item-divider:last').after(data).fadeOut(0).fadeIn(200);
+			});
+		}
 	});
 
 	//Arrow key nav for random and top page
-	$(document).keydown(function(e){  
-	    
-	    var code = (e.keyCode ? e.keyCode : e.which);
-	    var tops = [];
-	    var topImgInView = $('.row:in-viewport:first'); //set to row instead of img to prevent issues with images that are smaller than the controller
+	$(document).keydown(function(e)	{
+		var code = (e.keyCode ? e.keyCode : e.which);
+		var tops = [];
+		var topImgInView = $('.row:in-viewport:first'); //set to row instead of img to prevent issues with images that are smaller than the controller
 
-	    if (code == 38) { //up
-	    	e.preventDefault();
-	    	if (topImgInView.is($('.row:first')) && topInView(topImgInView)){ //if you push up and you're on the top of the top image
-	    		$('html,body').scrollTop(0);
-	    	}
-	    	else{ //otherwise, behave normally
-	    		$('html,body').scrollTop(topImgInView.parents('.results-item').offset().top-navbarHeight-22);
-	    	}
-	     	return;
-	     }
-	    if (code == 40) { //down
-	    	e.preventDefault();
-	    	if ($(window).scrollTop() < $('.results-divider').offset().top - navbarHeight){ //if user hasn't scrolled past the first chat
-	    		$('html,body').scrollTop($('.results-divider').offset().top-navbarHeight);
-	    	}
-	    	else if (bottomInView(topImgInView)){
-	     		$('html,body').scrollTop(topImgInView.parents('.results-item').next('.item-divider').offset().top-navbarHeight);
-	    	}
-		    else{
-		    	$('html,body').scrollTop(topImgInView.parents('.results-item').nextAll('.item-divider').eq(1).offset().top-navbarHeight);
-		    }
-		    return;
-	    }
+		if (code == 38) { //up
+			e.preventDefault();
+			if (topImgInView.is($('.row:first')) && topInView(topImgInView)){ //if you push up and you're on the top of the top image
+				$('html,body').scrollTop(0);
+			}
+			else{ //otherwise, behave normally
+				$('html,body').scrollTop(topImgInView.parents('.results-item').offset().top-navbarHeight-22);
+			}
+			return;
+		}
+		if (code == 40) { //down
+			e.preventDefault();
+			if ($(window).scrollTop() < $('.results-divider').offset().top - navbarHeight){ //if user hasn't scrolled past the first chat
+				$('html,body').scrollTop($('.results-divider').offset().top-navbarHeight);
+			}
+			else if (bottomInView(topImgInView)){
+				$('html,body').scrollTop(topImgInView.parents('.results-item').next('.item-divider').offset().top-navbarHeight);
+			}
+			else{
+				$('html,body').scrollTop(topImgInView.parents('.results-item').nextAll('.item-divider').eq(1).offset().top-navbarHeight);
+			}
+			return;
+		}
 	});
 	
 	//function that checks if the bottom of an image is in view,
 	//taking into account the navbar. For arrow key traversing.
-	function bottomInView(image){     
-		imageBottom = image.offset().top + image.height();  
+	function bottomInView(image) {
+		imageBottom = image.offset().top + image.height();
 		documentScroll = $(window).scrollTop();
 		if(imageBottom - documentScroll >= navbarHeight){
 			return true;
@@ -141,7 +135,7 @@ $(window).load(function(){
 
 	//function that checks if the top of an image is in view,
 	//taking into account the navbar. For arrow key traversing.
-	function topInView(image){     
+	function topInView(image) { 
 		imageTop = image.offset().top; 
 		documentScroll = $(window).scrollTop();
 		if(imageTop - documentScroll >= navbarHeight){
@@ -168,7 +162,7 @@ $(window).load(function(){
 	//When you click a specific result snippet in the search page.
 	//This is for when you already have this picture selected.
 	//Would need another for when you have to load the new image first.
-	$('.search-control-item.selected a').click(function(){   
+	$('#search-controls-contain').on('click', 'search-control-item.selected a', function() {
 		var lineOfInterest = $(this).attr('data-linenumber');
 		var containerHeight = $('#image-contain').height();
 		var imageHeight = $('#image-contain img').height();

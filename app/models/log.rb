@@ -23,7 +23,12 @@ class Log < ActiveRecord::Base
 
   def self.search(phrase, n)
     if phrase
-      find :all, :conditions => ['transcript LIKE ?', "%#{phrase}%"], :limit => n
+      find :all, :conditions => ['transcript LIKE ?', "%#{phrase}%"],
+        :limit => n
+      # Something like this would only match complete words, but it requires
+      # an SQLite plugin.
+      #find :all, :conditions => ['transcript REGEXP ?', "\\w#{phrase}\\w"],
+      #  :limit => n
     else []
     end
   end

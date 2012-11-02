@@ -9,11 +9,12 @@
 				<li><%= link_to "Random", root_url %></li>
 				<li class="divider-vertical"></li>    
 
-				<form <%= root_path %> class="navbar-search pull-left" method="get">
-					<%= text_field_tag :search, params[:search], :class => "search-query span4", :placeholder => params[:search] || "Search Omegle Logs" %>
-					<%# input type="text" class="search-query span4" placeholder="Search Omegle Logs"%>
-				</form>
-
+				<li>
+					<form class="navbar-search pull-left" action="<%= root_path %>" method="get">
+						<%= text_field_tag :search, params[:search], :class => "search-query span4", :placeholder => params[:search] || "Search Omegle Logs" %>
+						<%# input type="text" class="search-query span4" placeholder="Search Omegle Logs"%>
+					</form>
+				</li>
 			</ul>
 			<ul class="nav pull-right">
 				<li><a class="info-button"><i class="icon-question-sign icon-white"></i></a></li>

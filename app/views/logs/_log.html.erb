@@ -1,0 +1,27 @@
+<li class="results-item">
+<div class="row">
+	<div class="span6 offset1 img-polaroid">
+		<%= image_tag log.url, :width => "500", :class => "chat-file" %>
+	</div>
+	<div class="span3 control-container">
+		<div class="span3 controls">
+			<div class="voting">
+				<div class="span1 up-section">
+					<div class="up"></div>
+					<span><%= log.upvotes %></span>
+				</div>
+				<div class="span1 down-section">
+					<div class="down"></div>
+					<span><%= log.downvotes %></span>
+				</div>
+			</div>
+			<div class="chat-link">
+				<label>Link to this chat</label>
+				<input type="text" value="<%= log.public_url %>" readonly="readonly">
+			</div>
+			<div class="report-chat"><i class="icon-flag flag-chat"></i>Report Chat</div>
+		</div>
+	</div>
+</div>
+</li>
+<hr class="item-divider">

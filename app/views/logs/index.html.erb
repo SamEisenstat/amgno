@@ -5,36 +5,8 @@
 			<span>Use <i class="icon-arrow-up"></i> and <i class="icon-arrow-down"></i> to navigate chats.</span>
 		</div>
 		<hr class="results-divider"> <%# note that results-divider is different from item-divider %>
-		<ul>
-			<% @logs.each do |log| %>
-				<li class="results-item">
-					<div class="row">
-						<div class="span6 offset1 img-polaroid">
-							<%= image_tag log.url, :width => "500", :class => "chat-file" %>
-						</div>
-						<div class="span3 control-container">
-							<div class="span3 controls">
-								<div class="voting">
-									<div class="span1 up-section">
-										<div class="up"></div>
-										<span><%= log.upvotes %></span>
-									</div>
-									<div class="span1 down-section">
-										<div class="down"></div>
-										<span><%= log.downvotes %></span>
-									</div>
-								</div>
-								<div class="chat-link">
-									<label>Link to this chat</label>
-									<input type="text" value="<%= log.public_url %>" readonly="readonly">
-								</div>
-								<div class="report-chat"><i class="icon-flag flag-chat"></i>Report Chat</div>
-							</div>
-						</div>
-					</div>
-				</li>
-				<hr class="item-divider">
-			<% end %>
+		<ul class="results-container">
+			<%= render @logs %>
 		</ul>
 	</div>
 	<div class="push"></div>
