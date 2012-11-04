@@ -8,6 +8,11 @@ class LogsController < ApplicationController
     end
   end
 
+  def show
+    @logs = [(Log.find params[:id])]
+    render 'index'  # We use the same template as for multiple logs.
+  end
+
   def more
     @logs = Log.get_random 10
     render :layout => false

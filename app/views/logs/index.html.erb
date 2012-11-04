@@ -1,11 +1,13 @@
 <div class="wrapper">
 	<%= render "shared/navbar" %>
 	<div class="container">
-		<div class="instructions">
-			<span>Use <i class="icon-arrow-up"></i> and <i class="icon-arrow-down"></i> to navigate chats.</span>
-		</div>
-		<hr class="results-divider"> <%# note that results-divider is different from item-divider %>
-		<ul class="results-container">
+		<% if @logs.length > 1 %>
+			<div class="instructions">
+				<span>Use <i class="icon-arrow-up"></i> and <i class="icon-arrow-down"></i> to navigate chats.</span>
+			</div>
+			<hr class="results-divider"> <%# note that results-divider is different from item-divider %>
+		<% end %>
+		<ul class="results-container" <%=raw 'id="solo-page"' if @logs.length <= 1 %> >
 			<%= render @logs %>
 		</ul>
 	</div>

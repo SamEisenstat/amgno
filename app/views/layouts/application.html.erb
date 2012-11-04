@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Omegrep</title>
-	<%= stylesheet_link_tag    "application", :media => "all" %>
+	<title><%= @title or Omegrep %></title>
+	<%= stylesheet_link_tag "application", :media => "all" %>
 	<%= csrf_meta_tags %>
 </head>
 <body>
-	<%= yield %>
+	<%= content_for?(:content) ? yield(:content) : yield %>
 
 	<%= javascript_include_tag "application" %>
 </body>
