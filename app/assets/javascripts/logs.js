@@ -159,7 +159,7 @@ $(window).load(function(){
 	//Show the appropriate image and scroll to the appropriate place in
 	//response to clicking on a snippet.
 	$('#search-controls-contain').on('click', '.search-control-item:not(.selected) a', function() {
-		showResult($('.search-control-item').index($(this).closest('.search-control-item')));
+		showResult(matchToIndex($(this)));
 		scrollToResult($(this));
 	});
 	
@@ -169,10 +169,13 @@ $(window).load(function(){
 		scrollToResult($(this));
 	});
 
+	//Scrolls the container with the image of the chat to reach the chosen
+	//line.
 	function scrollToResult(match) {
 		var lineOfInterest = match.attr('data-linenumber');
-		var containerHeight = $('.image-container').height();
-		var imageHeight = $('.image-container img').height();
+		var imageContainer = $('.image-container').eq(matchToIndex(match));
+		var containerHeight = imageContainer.height();
+		var imageHeight = imageContainer.find('img').height();
 		var headerHeight = 68; //the image is squished a bit in this veiw so headerheight is smaller
 		var lineHeight = 25;  //same with lineHeight
 		$('.image-container').scrollTop(Math.min((containerHeight-imageHeight-60)*-1, headerHeight + lineHeight*lineOfInterest - (containerHeight/2)));
@@ -206,10 +209,10 @@ function resizeSearchContainer(){
 	$('body').height($('body').height()-60);
 }
 
-//Shows the results-container for the specified search result and hides all the
+//Shows the image-container for the specified search result and hides all the
 //other ones. Also ensures that clickovers are initialized properly.
 function showResult(showIndex) {
-	$('.results-container').each(function(index) {
+	$('.image-container').each(function(index) {
 		if(index === showIndex) {
 			$(this).show().addClass('selected');
 			if(typeof $(this).data('clickoverAdded') === 'undefined') {
@@ -220,4 +223,9 @@ function showResult(showIndex) {
 			$(this).hide().removeClass('selected');
 		}
 	});
+}
+
+//Finds the index of the given search link.
+function matchToIndex(match) {
+	return $('.search-control-item').index(match.closest('.search-control-item'));
 }
