@@ -3,7 +3,6 @@
 //lineHeight = 26; //text is 15px, linespacing is 15px, -4 cause in practice it seems more accurate
 //moreshit = false; //this is just for making the load-on-scroll stuff happen only once in testing purposes
 navbarHeight = 55;
-stickyControllers = [];
 
 $(window).load(function(){
 	//Initialize Modals
@@ -57,8 +56,8 @@ $(window).load(function(){
 	$(window).scroll(function() {
 		//Gives the callbacks to the window scroll event
 		$('.controls').each(function() {
-			var footer = $(this).parents('.results-item').next('.item-divider');
-			var stickyTop = $(this).parents('.control-container').offset().top; 
+			var footer = $(this).closest('.results-item').next('.item-divider');
+			var stickyTop = $(this).closest('.control-container').offset().top; 
 			var footerTop = footer.offset().top; 
 			var stickyHeight = $(this).height();
 			var limit = footerTop - stickyHeight - 15;
@@ -101,7 +100,7 @@ $(window).load(function(){
 				$('html,body').scrollTop(0);
 			}
 			else{ //otherwise, behave normally
-				$('html,body').scrollTop(topImgInView.parents('.results-item').offset().top-navbarHeight-22);
+				$('html,body').scrollTop(topImgInView.closest('.results-item').offset().top-navbarHeight-22);
 			}
 			return;
 		}
@@ -111,10 +110,10 @@ $(window).load(function(){
 				$('html,body').scrollTop($('.results-divider').offset().top-navbarHeight);
 			}
 			else if (bottomInView(topImgInView)){
-				$('html,body').scrollTop(topImgInView.parents('.results-item').next('.item-divider').offset().top-navbarHeight);
+				$('html,body').scrollTop(topImgInView.closest('.results-item').next('.item-divider').offset().top-navbarHeight);
 			}
 			else{
-				$('html,body').scrollTop(topImgInView.parents('.results-item').nextAll('.item-divider').eq(1).offset().top-navbarHeight);
+				$('html,body').scrollTop(topImgInView.closest('.results-item').nextAll('.item-divider').eq(1).offset().top-navbarHeight);
 			}
 			return;
 		}
@@ -148,42 +147,52 @@ $(window).load(function(){
 
 	//-------------------Search Page Below Here---------------------
 	//for "Top Of Chat" button in the search page
-	$('#top-of-chat').click(function(){
-		document.getElementById('image-contain').scrollTop = 0;
+	$('.container').on('click', '.top-of-chat', function(){
+		$(this).closest('.image-container').scrollTop(0);
 	})
 
-	//Popover for direct link in the search page
-	$('#direct-link').clickover().click(function(){
-		$('.popover input').click(function(){
-			$(this).select();
-		});
+	//Make the popover select on click.
+	$('body').on('click', '.popover input', function(){
+		$(this).select();
+	});
+
+	//Show the appropriate image and scroll to the appropriate place in
+	//response to clicking on a snippet.
+	$('#search-controls-contain').on('click', '.search-control-item:not(.selected) a', function() {
+		showResult($('.search-control-item').index($(this).closest('.search-control-item')));
+		scrollToResult($(this));
 	});
 	
 	//When you click a specific result snippet in the search page.
 	//This is for when you already have this picture selected.
-	//Would need another for when you have to load the new image first.
 	$('#search-controls-contain').on('click', 'search-control-item.selected a', function() {
-		var lineOfInterest = $(this).attr('data-linenumber');
-		var containerHeight = $('#image-contain').height();
-		var imageHeight = $('#image-contain img').height();
+		scrollToResult($(this));
+	});
+
+	function scrollToResult(match) {
+		var lineOfInterest = match.attr('data-linenumber');
+		var containerHeight = $('.image-container').height();
+		var imageHeight = $('.image-container img').height();
 		var headerHeight = 68; //the image is squished a bit in this veiw so headerheight is smaller
 		var lineHeight = 25;  //same with lineHeight
-		document.getElementById('image-contain').scrollTop = Math.min((containerHeight-imageHeight-60)*-1, headerHeight + lineHeight*lineOfInterest - (containerHeight/2));
+		$('.image-container').scrollTop(Math.min((containerHeight-imageHeight-60)*-1, headerHeight + lineHeight*lineOfInterest - (containerHeight/2)));
+	};
+
+	//To load more search results when you hit the bottom of the search results div
+	$('#search-controls-contain').scroll(function(){ 
+		var realHeight = $('#search-controls-contain')[0].scrollHeight;
+		if (realHeight <= $(this).height() + $(this).scrollTop() && moreshit==false){
+			$('.search-control-item:last').after('<div class="search-control-item loading-more">Loading More Results</div>');
+			moreshit=true;
+		}
 	});
 });
 
-//To load more search results when you hit the bottom of the search results div
-$('#search-controls-contain').scroll(function(){ 
-	var realHeight = document.getElementById('search-controls-contain').scrollHeight;
-	if (realHeight <= $(this).height() + $(this).scrollTop() +50 && moreshit==false){
-		$('.search-control-item:last').after('<div class="search-control-item loading-more">Loading More Results</div>');
-		moreshit=true;
-	}
-});
-
 //Resizes the container so the contents take up the whole window, without any scrolling
+//and hides all but the first search result.
 //In a document.ready so that you don't see the huge image for a split second
 $(document).ready(function(){
+	showResult(0);
 	resizeSearchContainer();
 });
 
@@ -195,4 +204,20 @@ function resizeSearchContainer(){
 	var newContainerHeight = $(window).height()-75-80;
 	$('.container.no-overflow').height(newContainerHeight);
 	$('body').height($('body').height()-60);
+}
+
+//Shows the results-container for the specified search result and hides all the
+//other ones. Also ensures that clickovers are initialized properly.
+function showResult(showIndex) {
+	$('.results-container').each(function(index) {
+		if(index === showIndex) {
+			$(this).show().addClass('selected');
+			if(typeof $(this).data('clickoverAdded') === 'undefined') {
+				$(this).find('.direct-link').clickover();
+				$(this).data('clickoverAdded', true);
+			}
+		} else {
+			$(this).hide().removeClass('selected');
+		}
+	});
 }
