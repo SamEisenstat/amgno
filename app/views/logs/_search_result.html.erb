@@ -1,13 +1,9 @@
 <div class="span6 img-polaroid image-container results-container">
 	<div class="image-controls">
-		<div class="span1 up-section search-vote">
-			<div class="up"></div>
-			<span><%= log.upvotes %></span>
-		</div>
-		<div class="span1 down-section search-vote">
-			<div class="down"></div>
-			<span><%= log.downvotes %></span>
-		</div>
+		<%= render :partial => "vote",
+			:locals => {:log => log, :type => "up", :extra_class => "search-vote"} %>
+		<%= render :partial => "vote",
+			:locals => {:log => log, :type => "down", :extra_class => "search-vote"} %>
 		<div class="other-controls">
 			<a class="top-of-chat">Top of chat</a>
 			<span class="bullet">&#8226;</span>
@@ -19,4 +15,4 @@
 	<div class="image-padding">
 		<img src="<%= log.url %>" width="500px" alt=""/>
 	</div>
-</div>	
+</div>

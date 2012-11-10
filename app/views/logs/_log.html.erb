@@ -6,14 +6,10 @@
 		<div class="span3 control-container">
 			<div class="span3 controls">
 				<div class="voting">
-					<div class="span1 up-section">
-						<div class="up"></div>
-						<span><%= log.upvotes %></span>
-					</div>
-					<div class="span1 down-section">
-						<div class="down"></div>
-						<span><%= log.downvotes %></span>
-					</div>
+					<%= render :partial => "vote",
+					      :locals => {:log => log, :type => "up"} %>
+					<%= render :partial => "vote",
+					      :locals => {:log => log, :type => "down"} %>
 				</div>
 				<div class="chat-link">
 					<label>Link to this chat</label>

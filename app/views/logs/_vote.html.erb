@@ -1,0 +1,9 @@
+<%= form_tag send(type+"vote_log_path", log), :method => "put",
+      :remote => true do |f| %>
+	<%= submit_tag do %>
+		<div class="span1 <%= type %>-section <%= extra_class rescue "" %>">
+			<div class="<%= type %>"></div>
+			<span><%= log.send(type+"votes") %></span>
+		</div>
+	<% end %>
+<% end %>
