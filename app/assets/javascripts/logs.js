@@ -164,17 +164,13 @@ $(window).load(function(){
 		$(this).select();
 	});
 
-	//Show the appropriate image and scroll to the appropriate place in
-	//response to clicking on a snippet.
-	$('#search-controls-contain').on('click', '.search-control-item:not(.selected) a', function() {
-		showResult(matchToIndex($(this)));
-		scrollToResult($(this));
-	});
-	
-	//When you click a specific result snippet in the search page.
-	//This is for when you already have this picture selected.
-	$('#search-controls-contain').on('click', 'search-control-item.selected a', function() {
-		scrollToResult($(this));
+	//Show the appropriate image and, if a specific snippet was clicked on,
+	//scroll to the appropriate place in the log.
+	$('#search-controls-contain').on('click', '.search-control-item', function(event) {
+		if(!$(this).hasClass("selected")) {
+			showResult(matchToIndex($(this)));
+		}
+		scrollToResult($(event.target).closest("a"));
 	});
 
 	//Scrolls the container with the image of the chat to reach the chosen
@@ -220,17 +216,15 @@ function resizeSearchContainer(){
 //Shows the image-container for the specified search result and hides all the
 //other ones. Also ensures that clickovers are initialized properly.
 function showResult(showIndex) {
-	$('.image-container').each(function(index) {
-		if(index === showIndex) {
-			$(this).show().addClass('selected');
-			if(typeof $(this).data('clickoverAdded') === 'undefined') {
-				$(this).find('.direct-link').clickover();
-				$(this).data('clickoverAdded', true);
-			}
-		} else {
-			$(this).hide().removeClass('selected');
-		}
-	});
+	$('.search-control-item').removeClass('selected');
+	$('.search-control-item').eq(showIndex).addClass('selected');
+
+	$('.image-container').hide();
+	var selectedImage = $('.image-container').eq(showIndex).show();
+	if(typeof selectedImage.data('clickoverAdded') === 'undefined') {
+		selectedImage.find('.direct-link').clickover();
+		selectedImage.data('clickoverAdded', true);
+	}
 }
 
 //Finds the index of the given search link.
