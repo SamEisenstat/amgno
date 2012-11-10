@@ -4,4 +4,9 @@ $('.autoload-item:last').after("<%=j render :partial => "matches",
 var newStuff = $("<%=j render :partial => "search_result", :collection => @logs,
                        :as => :log %>");
 $('.image-container:last').after(newStuff);
-newStuff.hide()
+newStuff.hide();
+
+<% if !@any_more %>
+	moreLogs = false;
+	$('#no-more-results').show();
+<% end %>

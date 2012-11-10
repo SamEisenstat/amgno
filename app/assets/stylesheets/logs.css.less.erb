@@ -18,7 +18,7 @@ body.height-auto{
 	margin: 0 auto -4em;
 }
 
-.nav li, .results, .instructions, .chat-link label, .line-number, .more, .image-controls, .search-results-title,.loading-more, .report-chat{
+.nav li, .results, .instructions, .chat-link label, .line-number, .more, .image-controls, .search-results-title, .loading-more, #no-more-results, .report-chat {
 	font-family: 'Proxima Nova', sans-serif;
 	text-transform: uppercase;
 }
@@ -215,7 +215,7 @@ h3.slogan{
 	margin-bottom: 15px;
 }
 
-.results span, .instructions{
+.instructions{
 	/*	font-family: ‘Courier New’, Courier, monospace;
 	 */	font-weight: normal;
 	color: #888;
@@ -429,7 +429,7 @@ li.results-item {
 	margin-left: 10px;
 }
 
-.search-control-item{
+.search-control-item, .search-message-item {
 	background-color: #fff;
 	cursor: pointer;
 }
@@ -438,14 +438,18 @@ li.results-item {
 	background-color: #f9f9f9;
 }*/
 
-.search-controls .search-control-item:last-child{
+.search-controls .search-control-item:last-child, .search-message-item {
 	border-bottom: 0;
 }
 
-.search-control-item{
+.search-control-item, .search-message-item {
 	border-bottom: 1px solid #ccc;
 /*	border-bottom: 1px solid rgba(0, 0, 255, 0.2);
 */	padding: 20px;
+}
+
+#no-more-results {
+	display: none;
 }
 
 .search-control-item:hover{
@@ -582,7 +586,7 @@ li.results-item {
 	font-weight: bold;
 }
 
-.loading-more{
+.search-message-item {
 	text-align: center;
 	background-color: #eee !important;
 }

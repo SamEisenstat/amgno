@@ -2,6 +2,7 @@
 //headerHeight = 74; //the thing that says Omegle, talk to strangers, etc.
 //lineHeight = 26; //text is 15px, linespacing is 15px, -4 cause in practice it seems more accurate
 navbarHeight = 55;
+moreLogs = true;
 
 $(window).load(function(){
 	//Initialize Modals
@@ -78,15 +79,15 @@ $(window).load(function(){
 	});
 
 	autoload($(window), function(){return $(document).height()}, 1500,
-			'<div class="results" style="padding-top: 0">'+
+			'<div class="results">'+
 			'<span>Loading more chats</span></div><hr>', function(){return "logs/more"});
 
 	//For continuous scrolling
 	function autoload(scrollable, currentHeight, loadDistance, loadingMessage, url) {
 		scrollable.scroll(function() {
 			if(currentHeight() <= scrollable.height() + scrollable.scrollTop() + loadDistance
-					&& $('.loading-message').length == 0) {
-				$('.autoload-item:last').after('<div class="loading-message" style="display: none; padding-top: 0">' + loadingMessage + '</div>');
+					&& $('.loading-message').length == 0 && moreLogs) {
+				$('.autoload-item:last').after('<div class="loading-message">' + loadingMessage + '</div>');
 				$('.loading-message').fadeIn(200);
 				$.getScript(url(), function(data) {
 					$('.loading-message').remove();
@@ -191,7 +192,7 @@ $(window).load(function(){
 	//To load more search results when you hit the bottom of the search results div
 	autoload($('#search-controls-contain'),
 		function(){return $('#search-controls-contain')[0].scrollHeight;}, 500,
-		'<div class="search-control-item loading-more">'+
+		'<div class="search-message-item loading-more">'+
 		'Loading more results</div>', function(){
 			return "logs/more?search=" + decodeURI(/search=(.+?)(&|$)/.
 				exec(location.search)[1]) +
