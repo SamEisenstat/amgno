@@ -1,10 +1,15 @@
 class LogsController < ApplicationController
+  before_filter :choose_logs, :only => [:index, :more]
+
   def index
     if params[:search]
-      @logs = Log.search params[:search], 10
       render :search
-    else
-      @logs = Log.get_random 10
+    end
+  end
+
+  def more
+    if params[:search]
+      render :more_results
     end
   end
 
@@ -13,8 +18,12 @@ class LogsController < ApplicationController
     render 'index'  # We use the same template as for multiple logs.
   end
 
-  def more
-    @logs = Log.get_random 10
-    render :layout => false
+  private
+  def choose_logs
+    if params[:search]
+      @logs, @any_more = Log.search params[:search], params[:start].to_i, 10
+    else
+      @logs = Log.get_random 10
+    end
   end
 end

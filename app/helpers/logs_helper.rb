@@ -3,10 +3,11 @@ module LogsHelper
   # phrase in the text.
   def matches(text, phrase)
     text = h text
+    phrase = h phrase
     result = []
     start = end_ = 0
     phrase_re = Regexp.new(Regexp.escape(phrase), Regexp::IGNORECASE)
-    text.scan(phrase_re) do |match|
+    text.scan(phrase_re) do
       old_end = end_
       start, end_ = Regexp.last_match.offset(0)
       result << {
@@ -14,6 +15,9 @@ module LogsHelper
         :text => excerpt(text[old_end..-1], phrase, :radius => 40,
                          :separator => ' ').
                    gsub(phrase_re, '<strong class="highlight">\0</strong>').
+                   gsub("You:", '<strong class="highlight you-result">\0</strong>').
+                   gsub("Stranger:", '<strong class="highlight stranger-result">\0</strong>').
+                   gsub(/\n+/, "<br>").
                    html_safe}
     end
     result

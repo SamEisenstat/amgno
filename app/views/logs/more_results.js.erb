@@ -1,0 +1,7 @@
+$('.autoload-item:last').after("<%=j render :partial => "matches",
+							           :collection => @logs, :as => :log %>");
+
+var newStuff = $("<%=j render :partial => "search_result", :collection => @logs,
+                       :as => :log %>");
+$('.image-container:last').after(newStuff);
+newStuff.hide()

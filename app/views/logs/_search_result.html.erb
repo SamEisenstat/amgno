@@ -1,0 +1,22 @@
+<div class="span6 img-polaroid image-container results-container">
+	<div class="image-controls">
+		<div class="span1 up-section search-vote">
+			<div class="up"></div>
+			<span><%= log.upvotes %></span>
+		</div>
+		<div class="span1 down-section search-vote">
+			<div class="down"></div>
+			<span><%= log.downvotes %></span>
+		</div>
+		<div class="other-controls">
+			<a class="top-of-chat">Top of chat</a>
+			<span class="bullet">&#8226;</span>
+			<a class="direct-link" data-content="<input type='text' value='<%= log.public_url %>'>" data-placement="bottom">Direct Link</a> 
+			<span class="bullet">&#8226;</span>
+			<i class="icon-flag flag-chat"></i>
+		</div>
+	</div>
+	<div class="image-padding">
+		<img src="<%= log.url %>" width="500px" alt=""/>
+	</div>
+</div>	

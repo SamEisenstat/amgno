@@ -1,7 +1,6 @@
 //maxDefaultHeight = 400; //max height of an image before expansion
 //headerHeight = 74; //the thing that says Omegle, talk to strangers, etc.
 //lineHeight = 26; //text is 15px, linespacing is 15px, -4 cause in practice it seems more accurate
-//moreshit = false; //this is just for making the load-on-scroll stuff happen only once in testing purposes
 navbarHeight = 55;
 
 $(window).load(function(){
@@ -11,7 +10,7 @@ $(window).load(function(){
 	});
 
 	//flag-chat is just the flag on the search page, .report-chat is the whole div on the top/random page
-	$('.results-container').on('click', '.flag-chat, .report-chat', function(){ 
+	$('.container').on('click', '.flag-chat, .report-chat', function(){ 
 		$('#flag-modal').modal('show');
 	});
 
@@ -43,13 +42,13 @@ $(window).load(function(){
 	});
 	
 	//for vote button clicking
-	$('.results-container').on('click', '.up-section, .down-section', function(){ 
+	$('.container').on('click', '.up-section, .down-section', function(){ 
 		$(this).toggleClass('pressed');
 		if ($(this).siblings('.span1').hasClass('pressed')) {$(this).siblings('.span1').toggleClass('pressed')};
 	});
 
 	//To make the chat url box select on click
-	$('.results-container').on('click', '.chat-link input', function(){
+	$('.container').on('click', '.chat-link input', function(){
 		$(this).select();
 	});
 
@@ -76,17 +75,25 @@ $(window).load(function(){
 				$(this).css({top: diff});
 			} 
 		});
-
-		//For continuous scrolling
-		if ($(document).height() <= ($(window).height() + $(window).scrollTop())
-				&& $('.results').length == 0) {
-			$('.item-divider:last').after('<div class="results" style="display: none; padding-top: 0"><span> Loading more shit</span></div>').fadeIn(200);
-			$.get('logs/more', function(data) {
-				$('.results').remove();
-				$('.item-divider:last').after(data).fadeOut(0).fadeIn(200);
-			});
-		}
 	});
+
+	autoload($(window), function(){return $(document).height()}, 1500,
+			'<div class="results" style="padding-top: 0">'+
+			'<span>Loading more chats</span></div><hr>', function(){return "logs/more"});
+
+	//For continuous scrolling
+	function autoload(scrollable, currentHeight, loadDistance, loadingMessage, url) {
+		scrollable.scroll(function() {
+			if(currentHeight() <= scrollable.height() + scrollable.scrollTop() + loadDistance
+					&& $('.loading-message').length == 0) {
+				$('.autoload-item:last').after('<div class="loading-message" style="display: none; padding-top: 0">' + loadingMessage + '</div>');
+				$('.loading-message').fadeIn(200);
+				$.getScript(url(), function(data) {
+					$('.loading-message').remove();
+				});
+			}
+		});
+	}
 
 	//Arrow key nav for random and top page
 	$(document).keydown(function(e)	{
@@ -182,13 +189,13 @@ $(window).load(function(){
 	};
 
 	//To load more search results when you hit the bottom of the search results div
-	$('#search-controls-contain').scroll(function(){ 
-		var realHeight = $('#search-controls-contain')[0].scrollHeight;
-		if (realHeight <= $(this).height() + $(this).scrollTop() && moreshit==false){
-			$('.search-control-item:last').after('<div class="search-control-item loading-more">Loading More Results</div>');
-			moreshit=true;
-		}
-	});
+	autoload($('#search-controls-contain'),
+		function(){return $('#search-controls-contain')[0].scrollHeight;}, 500,
+		'<div class="search-control-item loading-more">'+
+		'Loading more results</div>', function(){
+			return "logs/more?search=" + decodeURI(/search=(.+?)(&|$)/.
+				exec(location.search)[1]) +
+				"&start=" + $('.autoload-item').length});
 });
 
 //Resizes the container so the contents take up the whole window, without any scrolling

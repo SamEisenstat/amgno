@@ -21,14 +21,20 @@ class Log < ActiveRecord::Base
     # Log.find(:all).sample(n)
   end
 
-  def self.search(phrase, n)
+  def self.search(phrase, start, count)
     if phrase
-      find :all, :conditions => ['transcript LIKE ?', "%#{phrase}%"],
-        :limit => n
+      end_ = [start + count, 1000].min
+      puts start, end_
+      # Get one extra element to see if there are any more.
+      result = (find :all, :conditions => ['transcript LIKE ?', "%#{phrase}%"],
+         :limit => end_ + 1)[start...end_ + 1]
+      # The first element is the chat logs, the second tell you if there are
+      # more.
+      [result[0..-2], end_ < 1000 && result.length == count]
       # Something like this would only match complete words, but it requires
       # an SQLite plugin.
-      #find :all, :conditions => ['transcript REGEXP ?', "\\w#{phrase}\\w"],
-      #  :limit => n
+      #(find :all, :conditions => ['transcript REGEXP ?', "\\w#{phrase}\\w"],
+      #  :limit => end_)[start...end_]
     else []
     end
   end

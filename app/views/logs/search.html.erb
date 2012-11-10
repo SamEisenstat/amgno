@@ -2,44 +2,14 @@
 
 <div class="container no-overflow top-20 eighty">
 	<div class="span5 search-controls" id="search-controls-contain">
+		<%# TODO break on word boundaries %>
 		<div class="search-results-title">We found <%= pluralize @logs.length, 'chat' %> mentioning <%= params[:search] %></div>
-		<% max_matches = 10 %>
-		<% @logs.each do |log| %>
-			<% matches = matches(log.transcript, params[:search]) %>
-			<div class="search-control-item">
-				<% matches[0...max_matches].each do |match| %>
-					<blockquote><a data-linenumber="<%= match[:line] %>">"<%= match[:text] %>"</a></blockquote>
-				<% end %>
-			</div>
-			<% if matches.length > max_matches %>
-				<a class="more"> <%= matches.length - max_matches %> more from this chat</a>
-			<% end %>
-		<% end %>
+		<%= render :partial => "matches", :collection => @logs, :as => :log %>
 	</div>
 
 	<% @logs.each do |log| %>
-		<div class="span6 img-polaroid image-container results-container">
-			<div class="image-controls">
-				<div class="span1 up-section search-vote">
-					<div class="up"></div>
-					<span><%= log.upvotes %></span>
-				</div>
-				<div class="span1 down-section search-vote">
-					<div class="down"></div>
-					<span><%= log.downvotes %></span>
-				</div>
-				<div class="other-controls">
-					<a class="top-of-chat">Top of chat</a>
-					<span class="bullet">&#8226;</span>
-					<a class="direct-link" data-content="<input type='text' value='<%= log.public_url %>'>" data-placement="bottom">Direct Link</a> 
-					<span class="bullet">&#8226;</span>
-					<i class="icon-flag flag-chat"></i>
-				</div>
-			</div>
-			<div class="image-padding">
-				<img src="<%= log.url %>" width="500px" alt=""/>
-			</div>
-		</div>	
+		<%# TODO if the link is clicked as the page is loading, the controls disappear %>
+		<%= render :partial => "search_result", :locals => {:log => log} %>
 	<% end %>
 </div>
 
