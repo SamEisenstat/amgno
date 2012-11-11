@@ -91,6 +91,7 @@ $(window).load(function(){
 				$('.autoload-item:last').after('<div class="loading-message">' + loadingMessage + '</div>');
 				$('.loading-message').fadeIn(200);
 				$.getScript(url(), function(data) {
+					resizeSearchContainer();
 					$('.loading-message').remove();
 				});
 			}

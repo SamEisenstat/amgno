@@ -13,7 +13,7 @@ class VotesController < ApplicationController
   def vote(type)
     votes = Log.vote_by_url base64_url_decode(params[:url]), type, request.remote_ip
     if votes
-      head :accepted, type => votes
+      head :ok, type => votes
     else
       head :forbidden
     end
