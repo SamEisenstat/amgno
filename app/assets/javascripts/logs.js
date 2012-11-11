@@ -48,11 +48,11 @@ $(window).load(function(){
 	// });
 
 	//Manually scrolls to the question anchors in the info-modal because if we use
-	// actually anchors, it scrolls the background too.
+	// actual anchors, it scrolls the background too.
 	$('.modal-body li a').click(function(e){
 		e.preventDefault();
 		anchor = $(this).attr('href');
-		anchorScrollTop = $('#'+anchor).offset().top;
+		anchorScrollTop = $(anchor).offset().top;
 		modalOffset = $('#info-modal').offset().top;
 		modalHeader = 58;
 		$('.modal-body').scrollTop(anchorScrollTop-modalOffset-modalHeader);
