@@ -56,4 +56,11 @@ class Log < ActiveRecord::Base
       log.send(type)
     end
   end
+
+  # Get the chats with the highest scores
+  def self.get_top(start, count)
+    end_ = start + count
+    result = Log.find :all, :order => 'upvotes - downvotes DESC', :limit => end_
+    result[start...end_]
+  end
 end

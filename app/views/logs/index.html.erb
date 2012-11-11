@@ -1,6 +1,10 @@
 <div class="wrapper">
 	<%= render "shared/navbar" %>
-	<div id="random-page"></div>
+	<% if defined? @top_page %>
+		<div id="top-page"></div>
+	<% else %>
+		<div id="random-page"></div>
+	<% end %>
 	<div class="container">
 		<% if @logs.length > 1 %>
 			<div class="instructions">

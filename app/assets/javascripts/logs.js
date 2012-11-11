@@ -8,6 +8,7 @@ var searchPage, randomPage;
 $(document).ready(function(){
 	randomPage = $("#random-page").length !== 0;
 	searchPage = $("#search-page").length !== 0;
+	topPage    = $("#top-page")   .length !== 0;
 });
 
 $(window).load(function(){
@@ -87,8 +88,8 @@ $(window).load(function(){
 		});
 	}
 
-	// The following should only run on the random page.
-	if(randomPage) {
+	// The following should only run on the random page and the top page.
+	if(randomPage || topPage) {
 		$(window).scroll(function() {
 			//Gives the callbacks to the window scroll event
 			$('.controls').each(function() {
@@ -117,7 +118,13 @@ $(window).load(function(){
 		//Load more logs on the random page.
 		autoload($(window), function(){return $(document).height()}, 1500,
 				'<div class="results">'+
-				'<span>Loading more chats</span></div><hr>', function(){return "logs/more"});
+				'<span>Loading more chats</span></div><hr>', function(){
+					if(randomPage) {
+						return "logs/more"
+					} else {
+						return "logs/more_top?start=" + $('.autoload-item').length;
+					}
+				});
 
 		//Arrow key nav for random and top page
 		$(document).keydown(function(e)	{
