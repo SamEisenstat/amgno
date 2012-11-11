@@ -373,19 +373,21 @@ li.results-item {
 	color: #aaa;
 }
 
-.image-container{
-	height:	100%;
+.search-result-scroll{
+	height:	500px; /*changed from 100%. this will be changed by the js anyways.*/
 	overflow-y: auto;
 	overflow-x: hidden;
 	padding: 0;
 	width: 490px;
+
+	margin-top: 55px;
 }
 
-.image-container img{
+.search-result-scroll img{
 	overflow: hidden;
 	position: relative;
-	top: 55px;
-	z-index: 1;
+/*	top: 55px;
+*/	z-index: 1;
 }
 
 .no-overflow{
@@ -514,12 +516,14 @@ li.results-item {
 	height: 55px;
 	position: absolute;
 	background-color: #fff;
-	border-bottom:1px solid #ccc;
-	border-bottom:1px solid rgba(0, 0, 0, 0.2);
+	border:1px solid #ccc;
+	border:1px solid rgba(0, 0, 0, 0.2);
 	z-index: 100;
 	-webkit-box-shadow:0 1px 3px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow:0 1px 3px rgba(0, 0, 0, 0.1);
 	box-shadow:0 1px 3px rgba(0, 0, 0, 0.1);
+
+	margin-left: 412px;
 }
 
 .search-vote{

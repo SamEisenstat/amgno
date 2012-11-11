@@ -240,6 +240,7 @@ function resizeSearchContainer(){
 	var newContainerHeight = $(window).height()-75-80;
 	$('.container.no-overflow').height(newContainerHeight);
 	$('body').height($('body').height()-60);
+	$('.search-result-scroll').height(newContainerHeight-55);
 }
 
 //Shows the image-container for the specified search result and hides all the

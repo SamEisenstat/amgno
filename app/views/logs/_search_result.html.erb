@@ -1,4 +1,4 @@
-<div class="span6 img-polaroid image-container results-container">
+<div class="image-container">
 	<div class="image-controls">
 		<%= render :partial => "vote",
 			:locals => {:log => log, :type => "up", :extra_class => "search-vote"} %>
@@ -12,7 +12,9 @@
 			<i class="icon-flag flag-chat"></i>
 		</div>
 	</div>
-	<div class="image-padding">
-		<img src="<%= log.url %>" width="500px" alt=""/>
+	<div class="span6 img-polaroid search-result-scroll results-container">
+		<div class="image-padding">
+			<img src="<%= log.url %>" width="500px" alt=""/>
+		</div>
 	</div>
 </div>
