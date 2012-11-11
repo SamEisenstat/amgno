@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title><%= @title or Omegrep %></title>
+	<title>
+		<% if content_for?(:title) %>
+			<%= yield :title %>
+		<% else %>
+			Omegrep
+		<% end %>
+	</title>
+	<meta name="description" content="Omegrep lets you discover the best Omegle conversations, pictures and questions." >
 	<%= stylesheet_link_tag "application", :media => "all" %>
 	<%= favicon_link_tag %>
 	<%= javascript_include_tag "application" %>
