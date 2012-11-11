@@ -19,6 +19,11 @@ module LogsHelper
                    gsub("Stranger:", '<strong class="highlight stranger-result">\0</strong>').
                    gsub(/\n+/, "<br>").
                    html_safe}
+      
+      # Don't keep going if there are too many results, to save server time.
+      if result.length >= 100
+        break
+      end
     end
     result
   end

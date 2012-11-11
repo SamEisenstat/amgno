@@ -4,9 +4,7 @@ Omegrep::Application.routes.draw do
     collection do
       get "more"
     end
-    member do
-      put "upvote"
-      put "downvote"
-    end
   end
+  match "votes/:url/upvote" => "votes#upvote", :via => [:get, :post]
+  match "votes/:url/downvote" => "votes#downvote", :via => [:get, :post]
 end

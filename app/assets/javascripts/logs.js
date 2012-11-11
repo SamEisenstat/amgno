@@ -3,6 +3,12 @@
 //lineHeight = 26; //text is 15px, linespacing is 15px, -4 cause in practice it seems more accurate
 navbarHeight = 55;
 moreLogs = true;
+var searchPage, randomPage;
+
+$(document).ready(function(){
+	randomPage = $("#random-page").length !== 0;
+	searchPage = $("#search-page").length !== 0;
+});
 
 $(window).load(function(){
 	//Initialize Modals
@@ -42,45 +48,30 @@ $(window).load(function(){
 		$('.modal-body').scrollTop(anchorScrollTop-modalOffset-modalHeader);
 	});
 	
-	//for vote button clicking
+	//For vote button clicking
 	$('.container').on('click', '.up-section, .down-section', function(){ 
-		$(this).toggleClass('pressed');
-		if ($(this).siblings('.span1').hasClass('pressed')) {$(this).siblings('.span1').toggleClass('pressed')};
+		toggleVote($(this));
+		if ($(this).siblings('.span1').hasClass('pressed')) {
+			toggleVote($(this).siblings('.span1'));
+		}
 	});
+
+	//Sends a request to the server to vote and changes the appearence of the vote button.
+	function toggleVote(voteButton) {
+		var delta = voteButton.hasClass("pressed") ? -1 : 1;
+		votes = voteButton.find("span");
+		votes.text(parseInt(votes.text()) + delta);
+		voteButton.toggleClass("pressed");
+
+		var voteType = voteButton.hasClass("up-section") ? "upvote" : "downvote";
+		$.post("votes/"+$.base64.encode(voteButton.attr('data-url'))+
+				"/"+voteType);
+	}
 
 	//To make the chat url box select on click
 	$('.container').on('click', '.chat-link input', function(){
 		$(this).select();
 	});
-
-	$(window).scroll(function() {
-		//Gives the callbacks to the window scroll event
-		$('.controls').each(function() {
-			var footer = $(this).closest('.results-item').next('.item-divider');
-			var stickyTop = $(this).closest('.control-container').offset().top; 
-			var footerTop = footer.offset().top; 
-			var stickyHeight = $(this).height();
-			var limit = footerTop - stickyHeight - 15;
-			var padding = navbarHeight + 15;
-			var windowTop = $(window).scrollTop();
-
-			if (stickyTop < windowTop + padding){
-				$(this).css({ position: 'fixed', top: padding });
-			}
-			else {
-				$(this).css('position','static');
-			}
-
-			if (limit < windowTop + padding) {
-				var diff = limit - windowTop;
-				$(this).css({top: diff});
-			} 
-		});
-	});
-
-	autoload($(window), function(){return $(document).height()}, 1500,
-			'<div class="results">'+
-			'<span>Loading more chats</span></div><hr>', function(){return "logs/more"});
 
 	//For continuous scrolling
 	function autoload(scrollable, currentHeight, loadDistance, loadingMessage, url) {
@@ -96,115 +87,153 @@ $(window).load(function(){
 		});
 	}
 
-	//Arrow key nav for random and top page
-	$(document).keydown(function(e)	{
-		var code = (e.keyCode ? e.keyCode : e.which);
-		var tops = [];
-		var topImgInView = $('.row:in-viewport:first'); //set to row instead of img to prevent issues with images that are smaller than the controller
+	// The following should only run on the random page.
+	if(randomPage) {
+		$(window).scroll(function() {
+			//Gives the callbacks to the window scroll event
+			$('.controls').each(function() {
+				var footer = $(this).closest('.results-item').next('.item-divider');
+				var stickyTop = $(this).closest('.control-container').offset().top; 
+				var footerTop = footer.offset().top; 
+				var stickyHeight = $(this).height();
+				var limit = footerTop - stickyHeight - 15;
+				var padding = navbarHeight + 15;
+				var windowTop = $(window).scrollTop();
 
-		if (code == 38) { //up
-			e.preventDefault();
-			if (topImgInView.is($('.row:first')) && topInView(topImgInView)){ //if you push up and you're on the top of the top image
-				$('html,body').scrollTop(0);
+				if (stickyTop < windowTop + padding){
+					$(this).css({ position: 'fixed', top: padding });
+				}
+				else {
+					$(this).css('position','static');
+				}
+
+				if (limit < windowTop + padding) {
+					var diff = limit - windowTop;
+					$(this).css({top: diff});
+				} 
+			});
+		});
+
+		//Load more logs on the random page.
+		autoload($(window), function(){return $(document).height()}, 1500,
+				'<div class="results">'+
+				'<span>Loading more chats</span></div><hr>', function(){return "logs/more"});
+
+		//Arrow key nav for random and top page
+		$(document).keydown(function(e)	{
+			var code = (e.keyCode ? e.keyCode : e.which);
+			var tops = [];
+			var topImgInView = $('.row:in-viewport:first'); //set to row instead of img to prevent issues with images that are smaller than the controller
+
+			if (code == 38) { //up
+				e.preventDefault();
+				if (topImgInView.is($('.row:first')) && topInView(topImgInView)){ //if you push up and you're on the top of the top image
+					$('html,body').scrollTop(0);
+				}
+				else{ //otherwise, behave normally
+					$('html,body').scrollTop(topImgInView.closest('.results-item').offset().top-navbarHeight-22);
+				}
+				return;
 			}
-			else{ //otherwise, behave normally
-				$('html,body').scrollTop(topImgInView.closest('.results-item').offset().top-navbarHeight-22);
+			if (code == 40) { //down
+				e.preventDefault();
+				if ($(window).scrollTop() < $('.results-divider').offset().top - navbarHeight){ //if user hasn't scrolled past the first chat
+					$('html,body').scrollTop($('.results-divider').offset().top-navbarHeight);
+				}
+				else if (bottomInView(topImgInView)){
+					$('html,body').scrollTop(topImgInView.closest('.results-item').next('.item-divider').offset().top-navbarHeight);
+				}
+				else{
+					$('html,body').scrollTop(topImgInView.closest('.results-item').nextAll('.item-divider').eq(1).offset().top-navbarHeight);
+				}
+				return;
 			}
-			return;
-		}
-		if (code == 40) { //down
-			e.preventDefault();
-			if ($(window).scrollTop() < $('.results-divider').offset().top - navbarHeight){ //if user hasn't scrolled past the first chat
-				$('html,body').scrollTop($('.results-divider').offset().top-navbarHeight);
-			}
-			else if (bottomInView(topImgInView)){
-				$('html,body').scrollTop(topImgInView.closest('.results-item').next('.item-divider').offset().top-navbarHeight);
-			}
+		});
+		
+		//function that checks if the bottom of an image is in view,
+		//taking into account the navbar. For arrow key traversing.
+		function bottomInView(image) {
+			imageBottom = image.offset().top + image.height();
+			documentScroll = $(window).scrollTop();
+			if(imageBottom - documentScroll >= navbarHeight){
+				return true;
+			}			
 			else{
-				$('html,body').scrollTop(topImgInView.closest('.results-item').nextAll('.item-divider').eq(1).offset().top-navbarHeight);
+				return false;
+			}			
+		}
+
+		//function that checks if the top of an image is in view,
+		//taking into account the navbar. For arrow key traversing.
+		function topInView(image) { 
+			imageTop = image.offset().top; 
+			documentScroll = $(window).scrollTop();
+			if(imageTop - documentScroll >= navbarHeight){
+				return true;
+			}			
+			else{
+				return false;
+			}			
+		}
+	}
+	else if(searchPage) {
+		//-------------------Search Page Below Here---------------------
+		//for "Top Of Chat" button in the search page
+		$('.container').on('click', '.top-of-chat', function(){
+			$(this).closest('.image-container').scrollTop(0);
+		})
+
+		//Make the popover select on click.
+		$('body').on('click', '.popover input', function(){
+			$(this).select();
+		});
+
+		//Show the appropriate image and, if a specific snippet was clicked on,
+		//scroll to the appropriate place in the log.
+		$('#search-controls-contain').on('click', '.search-control-item', function(event) {
+			if(!$(this).hasClass("selected")) {
+				showResult(matchToIndex($(this)));
 			}
-			return;
-		}
-	});
-	
-	//function that checks if the bottom of an image is in view,
-	//taking into account the navbar. For arrow key traversing.
-	function bottomInView(image) {
-		imageBottom = image.offset().top + image.height();
-		documentScroll = $(window).scrollTop();
-		if(imageBottom - documentScroll >= navbarHeight){
-			return true;
-		}			
-		else{
-			return false;
-		}			
+			scrollToResult($(event.target).closest("a"));
+		});
+
+		//Scrolls the container with the image of the chat to reach the chosen
+		//line.
+		function scrollToResult(match) {
+			var lineOfInterest = match.attr('data-linenumber');
+			var imageContainer = $('.image-container').eq(matchToIndex(match));
+			var containerHeight = imageContainer.height();
+			var imageHeight = imageContainer.find('img').height();
+			var headerHeight = 68; //the image is squished a bit in this veiw so headerheight is smaller
+			var lineHeight = 25;  //same with lineHeight
+			$('.image-container').scrollTop(Math.min((containerHeight-imageHeight-60)*-1, headerHeight + lineHeight*lineOfInterest - (containerHeight/2)));
+		};
+
+		//To load more search results when you hit the bottom of the search results div
+		autoload($('#search-controls-contain'),
+			function(){return $('#search-controls-contain')[0].scrollHeight;}, 500,
+			'<div class="search-message-item loading-more">'+
+			'Loading more results</div>', function(){
+				return "logs/more?search=" + decodeURI(/search=(.+?)(&|$)/.
+					exec(location.search)[1]) +
+					"&start=" + $('.autoload-item').length});
 	}
-
-	//function that checks if the top of an image is in view,
-	//taking into account the navbar. For arrow key traversing.
-	function topInView(image) { 
-		imageTop = image.offset().top; 
-		documentScroll = $(window).scrollTop();
-		if(imageTop - documentScroll >= navbarHeight){
-			return true;
-		}			
-		else{
-			return false;
-		}			
-	}
-
-	//-------------------Search Page Below Here---------------------
-	//for "Top Of Chat" button in the search page
-	$('.container').on('click', '.top-of-chat', function(){
-		$(this).closest('.image-container').scrollTop(0);
-	})
-
-	//Make the popover select on click.
-	$('body').on('click', '.popover input', function(){
-		$(this).select();
-	});
-
-	//Show the appropriate image and, if a specific snippet was clicked on,
-	//scroll to the appropriate place in the log.
-	$('#search-controls-contain').on('click', '.search-control-item', function(event) {
-		if(!$(this).hasClass("selected")) {
-			showResult(matchToIndex($(this)));
-		}
-		scrollToResult($(event.target).closest("a"));
-	});
-
-	//Scrolls the container with the image of the chat to reach the chosen
-	//line.
-	function scrollToResult(match) {
-		var lineOfInterest = match.attr('data-linenumber');
-		var imageContainer = $('.image-container').eq(matchToIndex(match));
-		var containerHeight = imageContainer.height();
-		var imageHeight = imageContainer.find('img').height();
-		var headerHeight = 68; //the image is squished a bit in this veiw so headerheight is smaller
-		var lineHeight = 25;  //same with lineHeight
-		$('.image-container').scrollTop(Math.min((containerHeight-imageHeight-60)*-1, headerHeight + lineHeight*lineOfInterest - (containerHeight/2)));
-	};
-
-	//To load more search results when you hit the bottom of the search results div
-	autoload($('#search-controls-contain'),
-		function(){return $('#search-controls-contain')[0].scrollHeight;}, 500,
-		'<div class="search-message-item loading-more">'+
-		'Loading more results</div>', function(){
-			return "logs/more?search=" + decodeURI(/search=(.+?)(&|$)/.
-				exec(location.search)[1]) +
-				"&start=" + $('.autoload-item').length});
 });
 
-//Resizes the container so the contents take up the whole window, without any scrolling
-//and hides all but the first search result.
-//In a document.ready so that you don't see the huge image for a split second
 $(document).ready(function(){
-	showResult(0);
-	resizeSearchContainer();
-});
+	if(searchPage) {
+		//Resizes the container so the contents take up the whole window, without any scrolling
+		//and hides all but the first search result.
+		//In a document.ready so that you don't see the huge image for a split second
+		$(document).ready(function(){
+			showResult(0);
+			resizeSearchContainer();
+		});
 
-$(window).resize(function(){
-	resizeSearchContainer();
+		$(window).resize(function(){
+			resizeSearchContainer();
+		});
+	}
 });
 
 function resizeSearchContainer(){
