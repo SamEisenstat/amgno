@@ -18,7 +18,16 @@ $(window).load(function(){
 	});
 
 	//flag-chat is just the flag on the search page, .report-chat is the whole div on the top/random page
+	//Sets the form's action to reflect which chat is being reported.
 	$('.container').on('click', '.flag-chat, .report-chat', function(){ 
+		var flag;
+		if($(this).hasClass("flag-chat")) {
+			flag = $(this);
+		} else {
+			flag = $(this).find(".flag-chat");
+		}
+		$('#flag-modal form').attr("action",
+			"/reports/" + $.base64.encode(flag.attr("data-url")));
 		$('#flag-modal').modal('show');
 	});
 
@@ -48,7 +57,7 @@ $(window).load(function(){
 		modalHeader = 58;
 		$('.modal-body').scrollTop(anchorScrollTop-modalOffset-modalHeader);
 	});
-	
+
 	//For vote button clicking
 	$('.container').on('click', '.up-section, .down-section', function(){ 
 		toggleVote($(this));

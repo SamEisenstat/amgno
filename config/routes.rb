@@ -9,4 +9,9 @@ Omegrep::Application.routes.draw do
   match "top" => "logs#top", :as => :top_logs
   match "votes/:url/upvote" => "votes#upvote", :via => [:get, :post]
   match "votes/:url/downvote" => "votes#downvote", :via => [:get, :post]
+  resources :reports do
+    collection do
+      post ":url", :action => :create
+    end
+  end
 end

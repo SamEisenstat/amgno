@@ -1,4 +1,6 @@
 class VotesController < ApplicationController
+  include Base64Helper
+
   def upvote
     vote(:upvotes)
   end
@@ -15,9 +17,5 @@ class VotesController < ApplicationController
     else
       head :forbidden
     end
-  end
-
-  def base64_url_decode(ciphertext)
-    cipher_token = ciphertext.tr('-_','+/').unpack('m')[0]
   end
 end

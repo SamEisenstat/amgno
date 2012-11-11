@@ -27,4 +27,9 @@ module LogsHelper
     end
     result
   end
+
+  # Displays a flag icon, and records the url of a log to be flagged
+  def show_flag(log)
+    "<i class=\"icon-flag flag-chat\" data-url=\"#{h log.url}\"></i>".html_safe
+  end
 end

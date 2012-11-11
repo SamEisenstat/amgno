@@ -4,20 +4,18 @@
 			<button type="button" class="close modal-dismiss" data-dismiss="modal" aria-hidden="true">x</button>
 			<h3 id="myModalLabel">Report Chat</h3>
 		</div>
-		<div class="modal-body">
-			<label>What's wrong with this chat?</label>
-			<select>
-				<option>Personal information</option>
-				<option>Illegal content</option>
-				<option>Something else</option>
-			</select>
-			<textarea rows="3" placeholder="Any additional details."></textarea>
-		</div>
-		<div class="modal-footer">
-			<p class="submit-flag-alert"><strong>Thanks!</strong> We'll review this chat ASAP.</p>
-			<button class="btn modal-dismiss" data-dismiss="modal" aria-hidden="true">Cancel</button>
-			<button class="btn btn-primary" id="submit-flag">Submit For Review</button>
-		</div>
+		<%= form_for Report.new, :url => reports_path, :remote => true do |f| %>
+			<div class="modal-body">
+				<%= f.label :report_type, "What's wrong with this chat?" %>
+				<%= f.select :report_type, ["Personal information", "Illegal content", "Something else"] %>
+				<%= f.text_area :message, :rows => 3, :placeholder => "Any additional details." %>
+			</div>
+			<div class="modal-footer">
+				<p class="submit-flag-alert"><strong>Thanks!</strong> We'll review this chat ASAP.</p>
+				<button class="btn modal-dismiss" data-dismiss="modal" aria-hidden="true">Cancel</button>
+				<%= f.submit "Submit For Review", :class => "btn btn-primary", :id => "submit-flag"%>
+			</div>
+		<% end %>
 	</div>
 	<div class="modal fade" id="info-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none">
 		<div class="modal-header">
