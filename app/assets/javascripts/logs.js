@@ -180,7 +180,7 @@ $(window).load(function(){
 		//-------------------Search Page Below Here---------------------
 		//for "Top Of Chat" button in the search page
 		$('.container').on('click', '.top-of-chat', function(){
-			$(this).closest('.image-container').scrollTop(0);
+			$(this).closest('.image-container').find('.search-result-scroll').scrollTop(0);
 		})
 
 		//Make the popover select on click.
@@ -201,12 +201,12 @@ $(window).load(function(){
 		//line.
 		function scrollToResult(match) {
 			var lineOfInterest = match.attr('data-linenumber');
-			var imageContainer = $('.image-container').eq(matchToIndex(match));
+			var imageContainer = $('.search-result-scroll').eq(matchToIndex(match));
 			var containerHeight = imageContainer.height();
 			var imageHeight = imageContainer.find('img').height();
 			var headerHeight = 68; //the image is squished a bit in this veiw so headerheight is smaller
 			var lineHeight = 25;  //same with lineHeight
-			$('.image-container').scrollTop(Math.min((containerHeight-imageHeight-60)*-1, headerHeight + lineHeight*lineOfInterest - (containerHeight/2)));
+			imageContainer.scrollTop(Math.min((containerHeight-imageHeight-60)*-1, headerHeight + lineHeight*lineOfInterest - (containerHeight/2)));
 		};
 
 		//To load more search results when you hit the bottom of the search results div

@@ -22,7 +22,6 @@ class LogsController < ApplicationController
   def choose_logs
     if params[:search]
       @logs, @any_more = Log.search params[:search], params[:start].to_i, 10
-      puts @logs.length
     else
       @logs = Log.get_random 10
     end
