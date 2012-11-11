@@ -1,10 +1,10 @@
-<% max_matches = 2 %>
+<% max_matches = 3 %>
 <% matches = matches(log.transcript, params[:search]) %>
 <div class="search-control-item autoload-item">
 	<% matches[0...max_matches].each do |match| %>
 		<blockquote><a data-linenumber="<%= match[:line] %>"><%= match[:text] %></a></blockquote>
 	<% end %>
+	<% if matches.length > max_matches %>
+		<div class="more"> <%= matches.length - max_matches %> more from this chat</div>
+	<% end %>
 </div>
-<% if matches.length > max_matches %>
-	<a class="more"> <%= matches.length - max_matches %> more from this chat</a>
-<% end %>

@@ -4,7 +4,7 @@
 <div class="container no-overflow top-20 eighty">
 	<div class="span5 search-controls" id="search-controls-contain">
 		<%# TODO break on word boundaries %>
-		<div class="search-results-title">We found <%= pluralize @logs.length, 'chat' %> mentioning <%= params[:search] %></div>
+		<div class="search-results-title">We found <%= @logs.length >= 10 ? "lots" : pluralize @logs.length, 'chat' %> mentioning <%= params[:search] %></div>
 		<%= render :partial => "matches", :collection => @logs, :as => :log %>
 		<div class="search-message-item" id="no-more-results">Sorry, that's all</div>
 	</div>
