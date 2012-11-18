@@ -49,18 +49,33 @@ class Log < ActiveRecord::Base
   # before. Returns the new number of votes.
   def self.vote_by_url(url, type, ip)
     log = find_by_url url
-    vote = Vote.new :log => log
+    vote = Vote.new :log => log, :vote_type => type
     vote.ip = ip
     if vote.save
       log.increment!(type)
       log.send(type)
     end
   end
+  
+  @wilson_score = <<END
+    (CASE WHEN upvotes = 0 THEN
+      0
+    ELSE
+      (-1.96 * SQRT(upvotes*downvotes/(upvotes+downvotes) + 0.9604)
+                     + upvotes + 1.9208)
+                             /
+              (upvotes + downvotes + 3.8416)
+    END)
+    DESC
+END
 
   # Get the chats with the highest scores
   def self.get_top(start, count)
     end_ = start + count
+    # The following sucks
     result = Log.find :all, :order => 'upvotes - downvotes DESC', :limit => end_
+    # The following requires an SQL that supports SQRT
+    #result = Log.find :all, :order => @wilson_score, :limit => end_
     result[start...end_]
   end
 end

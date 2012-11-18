@@ -1,8 +1,9 @@
 class Vote < ActiveRecord::Base
-  attr_accessible :log
+  attr_accessible :log, :vote_type
 
   belongs_to :log
   validates :log, :presence => true
+  validates :vote_type, :presence => true
   validate :ip_cannot_vote_more_than_once_per_log
 
   def ip_cannot_vote_more_than_once_per_log
