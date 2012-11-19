@@ -8,22 +8,26 @@
 
 class String
   def base_name
-    match(/([0-9a-f]*)\.png/)[1]
+    match(/[^0-9a-f]*([0-9a-f]*)/)[1]
   end
 end
 
 logs = Set.new(Log.all.map { |log| log.url.base_name })
 count = 0
-Dir.glob('../test/*.png').each_slice(100) do |slice|
+Dir.glob('../logs/*.fixed').each_slice(100) do |slice|
   ActiveRecord::Base.transaction do
     slice.each do |file|
       base_name = file.base_name
       unless logs.include?(base_name)
-        transcript = (IO.read(file.match(/(.*)\.png/)[1]+'.txt.fixed')
-                       rescue nil)
+        transcript = begin
+          IO.read(file.base_name+'.txt.fixed')
+        rescue
+          nil
+        end
         log = Log.new :url => 'http://l.omegle.com/'+base_name+'.png',
-          :public_url => 'http://logs.omegle.com/'+base_name,
           :transcript => transcript
+        # I don't do this in one step, as the log doesn't have an id yet.
+        log.public_url = base_name
         log.save
       end
     end
