@@ -3,7 +3,10 @@ class LogsController < ApplicationController
 
   def index
     if params[:search]
+      @page = :search
       render :search
+    else
+      @page = :random
     end
   end
 
@@ -20,7 +23,7 @@ class LogsController < ApplicationController
 
   def top
     @logs = Log.get_top 0, 10
-    @top_page = true
+    @page = :top
     render :index
   end
 

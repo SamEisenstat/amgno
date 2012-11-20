@@ -1,9 +1,5 @@
-<% if !defined? @top_page
-	@top_page = false
-end %>
-
 <% content_for :title do %>
-	<% if @top_page %>
+	<% if @page == :top %>
 		Find Funny Omegle Conversations on Omegrep
 	<% else %>
 		Find Funny Omegle Conversations | Random
@@ -12,7 +8,7 @@ end %>
 
 <div class="wrapper">
 	<%= render "shared/navbar" %>
-	<% if @top_page %>
+	<% if @page == :top %>
 		<div id="top-page"></div>
 	<% else %>
 		<div id="random-page"></div>

@@ -8,11 +8,12 @@
 
 class String
   def base_name
-    match(/[^0-9a-f]*([0-9a-f]*)/)[1]
+    match(/[^0-9a-f]*([0-9a-f]*)[^\/]*$/)[1]
   end
 end
 
-logs = Set.new(Log.all.map { |log| log.url.base_name })
+logs = Set.new
+Log.all.each { |log| logs.add(log.url.base_name) }
 count = 0
 Dir.glob('../logs/*.fixed').each_slice(100) do |slice|
   ActiveRecord::Base.transaction do

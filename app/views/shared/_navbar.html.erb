@@ -3,11 +3,12 @@
 		<div class="container">
 		  <%= link_to root_path, :class => "brand nav-logo" do %><div class="omegreplogo"></div><% end %>
 			<ul class="nav">
-				<li class="divider-vertical"></li>    
-				<li><%= link_to "Top", top_logs_path %></li>
-				<li class="divider-vertical"></li>    
-				<li><%= link_to "Random", root_path %></li>
-				<li class="divider-vertical"></li>    
+				<li <%= @page == :top ? 'class="active"'.html_safe : "" %>>
+					<%= link_to "Top", top_logs_path %>
+				</li>
+				<li <%= @page == :random ? 'class="active"'.html_safe : "" %>>
+					<%= link_to "Random", root_path %>
+				</li>
 
 				<li>
 					<form class="navbar-search pull-left" action="<%= root_path %>" method="get">
