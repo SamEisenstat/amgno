@@ -138,8 +138,8 @@ $(window).load(function(){
 
 		//(Used to be arrow key) N/M nav for random and top page
 		$(document).keydown(function(e)	{
-			if ($(".search-query").is(":focus")){ //leave if the user is in an input so they can search for words with N and M
-				return;
+			if ($(".search-query").is(":focus") || $('.results-divider').length == 0){ //leave if the user is in an input so they can search for words with N and M
+				return;																	//Also leave if there is no .results divider because that means they are on a single chat page.
 			}
 
 			var code = (e.keyCode ? e.keyCode : e.which);
@@ -158,10 +158,9 @@ $(window).load(function(){
 			}
 			if (code == 78) { //down - n key
 				e.preventDefault();
-				if ($(window).scrollTop() < $('.row:first').offset().top - 20 - navbarHeight){ //if user hasn't scrolled past the first chat. 20 is the divider margin.
-					if ($('.results-divider')) {$('html,body').scrollTop($('.results-divider').offset().top-navbarHeight);}
-					else {$('html,body').scrollTop($('.row:first').offset().top -20 -navbarHeight);} //these conditions are there in case you dont have an ".instructions" div with a ".results-divider"
-				}
+				if ($(window).scrollTop() < $('.results-divider').offset().top - navbarHeight){ //If user hasn't scrolled past the first chat
+					$('html,body').scrollTop($('.results-divider').offset().top-navbarHeight); //Note that results divider is not the same as item-divider
+				}																				//Results divider is the one under the instructions
 				else if (bottomInView(topImgInView)){
 					$('html,body').scrollTop(topImgInView.closest('.results-item').next('.item-divider').offset().top-navbarHeight);
 				}
