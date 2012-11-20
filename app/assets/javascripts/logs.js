@@ -19,7 +19,7 @@ $(window).load(function(){
 
 	//flag-chat is just the flag on the search page, .report-chat is the whole div on the top/random page
 	//Sets the form's action to reflect which chat is being reported.
-	$('.container').on('click', '.flag-chat, .report-chat', function(){ 
+	$('.container').on('click', '.flag-chat, .report-chat', function(){
 		var flag;
 		if($(this).hasClass("flag-chat")) {
 			flag = $(this);
@@ -42,7 +42,7 @@ $(window).load(function(){
 	});
 
 	//Fixes bug on search page where clicking to an anchor in the info modal made the page scroll.
-	// Stopped happening once I removed the overflow:hidden. 
+	// Stopped happening once I removed the overflow:hidden.
 	// $('.modal-footer .btn').click(function(){
 	// 	$('body').scrollTop() = 0;
 	// });
@@ -59,7 +59,7 @@ $(window).load(function(){
 	});
 
 	//For vote button clicking
-	$('.container').on('click', '.up-section, .down-section', function(){ 
+	$('.container').on('click', '.up-section, .down-section', function(){
 		toggleVote($(this));
 		if ($(this).siblings('.span1').hasClass('pressed')) {
 			toggleVote($(this).siblings('.span1'));
@@ -104,8 +104,8 @@ $(window).load(function(){
 			//Gives the callbacks to the window scroll event
 			$('.controls').each(function() {
 				var footer = $(this).closest('.results-item').next('.item-divider');
-				var stickyTop = $(this).closest('.control-container').offset().top; 
-				var footerTop = footer.offset().top; 
+				var stickyTop = $(this).closest('.control-container').offset().top;
+				var footerTop = footer.offset().top;
 				var stickyHeight = $(this).height();
 				var limit = footerTop - stickyHeight - 15;
 				var padding = navbarHeight + 15;
@@ -121,7 +121,7 @@ $(window).load(function(){
 				if (limit < windowTop + padding) {
 					var diff = limit - windowTop;
 					$(this).css({top: diff});
-				} 
+				}
 			});
 		});
 
@@ -136,8 +136,12 @@ $(window).load(function(){
 					}
 				});
 
-		//Arrow key nav for random and top page
+		//(Used to be arrow key) N/M nav for random and top page
 		$(document).keydown(function(e)	{
+			if ($(".search-query").is(":focus") || $('.results-divider').length == 0){ //leave if the user is in an input so they can search for words with N and M
+				return;																	//Also leave if there is no .results divider because that means they are on a single chat page.
+			}
+
 			var code = (e.keyCode ? e.keyCode : e.which);
 			var tops = [];
 			var topImgInView = $('.row:in-viewport:first'); //set to row instead of img to prevent issues with images that are smaller than the controller
@@ -154,9 +158,9 @@ $(window).load(function(){
 			}
 			if (code == 78) { //down - n key
 				e.preventDefault();
-				if ($(window).scrollTop() < $('.results-divider').offset().top - navbarHeight){ //if user hasn't scrolled past the first chat
-					$('html,body').scrollTop($('.results-divider').offset().top-navbarHeight);
-				}
+				if ($(window).scrollTop() < $('.results-divider').offset().top - navbarHeight){ //If user hasn't scrolled past the first chat
+					$('html,body').scrollTop($('.results-divider').offset().top-navbarHeight); //Note that results divider is not the same as item-divider
+				}																				//Results divider is the one under the instructions
 				else if (bottomInView(topImgInView)){
 					$('html,body').scrollTop(topImgInView.closest('.results-item').next('.item-divider').offset().top-navbarHeight);
 				}
@@ -166,7 +170,7 @@ $(window).load(function(){
 				return;
 			}
 		});
-		
+
 		//function that checks if the bottom of an image is in view,
 		//taking into account the navbar. For arrow key traversing.
 		function bottomInView(image) {
@@ -174,23 +178,23 @@ $(window).load(function(){
 			documentScroll = $(window).scrollTop();
 			if(imageBottom - documentScroll >= navbarHeight){
 				return true;
-			}			
+			}
 			else{
 				return false;
-			}			
+			}
 		}
 
 		//function that checks if the top of an image is in view,
 		//taking into account the navbar. For arrow key traversing.
-		function topInView(image) { 
-			imageTop = image.offset().top; 
+		function topInView(image) {
+			imageTop = image.offset().top;
 			documentScroll = $(window).scrollTop();
 			if(imageTop - documentScroll >= navbarHeight){
 				return true;
-			}			
+			}
 			else{
 				return false;
-			}			
+			}
 		}
 	}
 	else if(searchPage) {
