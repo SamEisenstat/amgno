@@ -158,8 +158,9 @@ $(window).load(function(){
 			}
 			if (code == 78) { //down - n key
 				e.preventDefault();
-				if ($(window).scrollTop() < $('.results-divider').offset().top - navbarHeight){ //if user hasn't scrolled past the first chat
-					$('html,body').scrollTop($('.results-divider').offset().top-navbarHeight);
+				if ($(window).scrollTop() < $('.row:first').offset().top - 20 - navbarHeight){ //if user hasn't scrolled past the first chat. 20 is the divider margin.
+					if ($('.results-divider')) {$('html,body').scrollTop($('.results-divider').offset().top-navbarHeight);}
+					else {$('html,body').scrollTop($('.row:first').offset().top -20 -navbarHeight);} //these conditions are there in case you dont have an ".instructions" div with a ".results-divider"
 				}
 				else if (bottomInView(topImgInView)){
 					$('html,body').scrollTop(topImgInView.closest('.results-item').next('.item-divider').offset().top-navbarHeight);
