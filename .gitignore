@@ -6,9 +6,9 @@ capybara-*.html
 /.bundle
 /vendor/bundle
 /log/*
-/tmp/*
+/tmp/cache
+/tmp/sessions
 /db/*.sqlite3
-/db/schema.rb
 /public/system/*
 /coverage/
 /spec/tmp/*
