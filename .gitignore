@@ -10,6 +10,7 @@ capybara-*.html
 /tmp/sessions/*
 /tmp/pids/server.pid
 /db/*.sqlite3
+filter.sql
 /public/system/*
 /public/assets/*
 /coverage/

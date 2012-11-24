@@ -1,5 +1,7 @@
-facebook urls
+facebook urls/fbcdn
 emails
-skype addresses
+skype addresses - This is a problem; most people who say skype don't share
+	skipe accounts, but those that do are hard to detect. It probably doesn't
+	matter if we filter them, as they're generally pretty boring.
 twitter
-kik
+kik - Same issues as skype.

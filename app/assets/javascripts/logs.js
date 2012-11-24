@@ -224,7 +224,8 @@ $(window).load(function(){
 			var containerHeight = imageContainer.height();
 			var imageHeight = imageContainer.find('img').height();
 			var headerHeight = 68; //the image is squished a bit in this veiw so headerheight is smaller
-			var lineHeight = 25;  //same with lineHeight
+			var lineHeight = 23;  //same with lineHeight
+			console.log(lineHeight);
 			imageContainer.scrollTop(Math.min((containerHeight-imageHeight-60)*-1, headerHeight + lineHeight*lineOfInterest - (containerHeight/2)));
 		};
 
