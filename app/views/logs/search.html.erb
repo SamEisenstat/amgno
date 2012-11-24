@@ -11,6 +11,9 @@
 		<%# TODO break on word boundaries %>
 		<div class="search-results-title">We found <%= @logs.length >= 10 ? "lots of chats" : pluralize(@logs.length, 'chat') %> mentioning <%= params[:search] %></div>
 		<%= render :partial => "matches", :collection => @logs, :as => :log %>
+		<div class="loading-message" style="display: none">
+			<div class="search-message-item loading-more">Loading more results</div>
+		</div>
 		<div class="search-message-item" id="no-more-results">Sorry, that's all</div>
 	</div>
 

@@ -84,15 +84,14 @@ $(window).load(function(){
 	});
 
 	//For continuous scrolling
-	function autoload(scrollable, currentHeight, loadDistance, loadingMessage, url) {
+	function autoload(scrollable, currentHeight, loadDistance, url) {
 		scrollable.scroll(function() {
 			if(currentHeight() <= scrollable.height() + scrollable.scrollTop() + loadDistance
-					&& $('.loading-message').length == 0 && moreLogs) {
-				$('.autoload-item:last').after('<div class="loading-message">' + loadingMessage + '</div>');
+					&& $('.loading-message:visible').length == 0 && moreLogs) {
 				$('.loading-message').fadeIn(200);
 				$.getScript(url(), function(data) {
 					resizeSearchContainer();
-					$('.loading-message').remove();
+					$('.loading-message').hide();
 				});
 			}
 		});
@@ -127,8 +126,7 @@ $(window).load(function(){
 
 		//Load more logs on the random page.
 		autoload($(window), function(){return $(document).height()}, 1500,
-				'<div class="results">'+
-				'<span>Loading more chats</span></div><hr>', function(){
+				function(){
 					if(randomPage) {
 						return "logs/more"
 					} else {
@@ -232,12 +230,10 @@ $(window).load(function(){
 
 		//To load more search results when you hit the bottom of the search results div
 		autoload($('#search-controls-contain'),
-			function(){return $('#search-controls-contain')[0].scrollHeight;}, 500,
-			'<div class="search-message-item loading-more">'+
-			'Loading more results</div>', function(){
-				return "logs/more?search=" + decodeURI(/search=(.+?)(&|$)/.
-					exec(location.search)[1]) +
-					"&start=" + $('.autoload-item').length});
+			function(){return $('#search-controls-contain')[0].scrollHeight;},
+			500, function(){return "logs/more?search=" +
+				decodeURI(/search=(.+?)(&|$)/.exec(location.search)[1]) +
+				"&start=" + $('.autoload-item').length});
 	}
 });
 

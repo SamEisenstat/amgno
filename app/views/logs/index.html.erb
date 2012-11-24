@@ -6,6 +6,9 @@
 	<% end %>
 <% end %>
 
+
+<% single = @logs.length == 1 %>
+
 <div class="wrapper">
 	<%= render "shared/navbar" %>
 	<% if @page == :top %>
@@ -14,14 +17,20 @@
 		<div id="random-page"></div>
 	<% end %>
 	<div class="container">
-		<% if @logs.length > 1 %>
+		<% unless single %>
 			<div class="instructions">
 				<span>Use <strong>N</strong> and <strong>M</strong> to navigate chats.</span>
 			</div>
 			<hr class="results-divider"> <%# note that results-divider is different from item-divider %>
 		<% end %>
-		<ul class="results-container" <%=raw 'id="solo-page"' if @logs.length <= 1 %> >
+		<ul class="results-container" <%=raw 'id="solo-page"' if single %> >
 			<%= render @logs %>
+			<% unless single %>
+				<div class="loading-message results" style="display: none">
+					<span>Loading more chats</span>
+					<hr>
+				</div>
+			<% end %>
 		</ul>
 	</div>
 	<div class="push"></div>

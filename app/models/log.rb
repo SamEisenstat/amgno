@@ -14,6 +14,23 @@ class Log < ActiveRecord::Base
     self.downvotes = 0    if downvotes.nil?
   end
 
+  # The following sucks
+  @score_sql = <<END
+    upvotes - downvotes DESC
+END
+  # The following requires an SQL that supports SQRT
+  #<<END
+  #  (CASE WHEN upvotes = 0 THEN
+  #    0
+  #  ELSE
+  #    (-1.96 * SQRT(upvotes*downvotes/(upvotes+downvotes) + 0.9604)
+  #                   + upvotes + 1.9208)
+  #                           /
+  #            (upvotes + downvotes + 3.8416)
+  #  END)
+  #  DESC
+#END
+
   # Return 10 random logs
   def self.get_random(n)
     Log.find :all, :order => 'random()', :limit => 10
@@ -28,20 +45,26 @@ class Log < ActiveRecord::Base
   # Boolean value indicating whether the end of the search results has been
   # reached.
   def self.search(phrase, start, count)
-    if phrase
-      end_ = [start + count, 1000].min
-      # Get one extra element to see if there are any more.
-      result = (find :all, :conditions => ['transcript LIKE ?', "%#{phrase}%"],
-         :limit => end_ + 1)
-      # The first element is the chat logs, the second tell you if there are
-      # more.
-      [result[start...end_], end_ < 1000 && result.length == end_ + 1]
-      # Something like this would only match complete words, but it requires
-      # an SQLite plugin.
-      #(find :all, :conditions => ['transcript REGEXP ?', "\\w#{phrase}\\w"],
-      #  :limit => end_)[start...end_]
-    else []
-    end
+    return [[], true] unless phrase
+
+    end_ = [start + count, 1000].min
+    # Get one extra element to see if there are any more.
+    result = (find :all, :conditions => ['transcript LIKE ?', "%#{phrase}%"],
+       :limit => end_ + 1, :order => @score_sql)
+    # The first element is the chat logs, the second tell you if there are
+    # more.
+    [result[start...end_], end_ < 1000 && result.length == end_ + 1]
+    # Something like this would only match complete words, but it requires
+    # an SQLite plugin.
+    #(find :all, :conditions => ['transcript REGEXP ?', "\\w#{phrase}\\w"],
+    #  :limit => end_)[start...end_]
+  end
+
+  # Get the chats with the highest scores
+  def self.get_top(start, count)
+    end_ = start + count
+    result = Log.find :all, :order => @score_sql, :limit => end_
+    result[start...end_]
   end
 
   # Adds of vote of the give type to the log with the given url. Logs the ip of
@@ -55,27 +78,5 @@ class Log < ActiveRecord::Base
       log.increment!(type)
       log.send(type)
     end
-  end
-  
-  @wilson_score = <<END
-    (CASE WHEN upvotes = 0 THEN
-      0
-    ELSE
-      (-1.96 * SQRT(upvotes*downvotes/(upvotes+downvotes) + 0.9604)
-                     + upvotes + 1.9208)
-                             /
-              (upvotes + downvotes + 3.8416)
-    END)
-    DESC
-END
-
-  # Get the chats with the highest scores
-  def self.get_top(start, count)
-    end_ = start + count
-    # The following sucks
-    result = Log.find :all, :order => 'upvotes - downvotes DESC', :limit => end_
-    # The following requires an SQL that supports SQRT
-    #result = Log.find :all, :order => @wilson_score, :limit => end_
-    result[start...end_]
   end
 end
