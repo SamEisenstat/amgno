@@ -9,9 +9,7 @@ $(document).ready(function(){
 	randomPage = $("#random-page").length !== 0;
 	searchPage = $("#search-page").length !== 0;
 	topPage    = $("#top-page")   .length !== 0;
-});
 
-$(window).load(function(){
 	//Initialize Modals
 	$('.info-button').click(function() {
 		$('#info-modal').modal('show');
@@ -243,10 +241,8 @@ $(document).ready(function(){
 		//Resizes the container so the contents take up the whole window, without any scrolling
 		//and hides all but the first search result.
 		//In a document.ready so that you don't see the huge image for a split second
-		$(document).ready(function(){
-			showResult(0);
-			resizeSearchContainer();
-		});
+		showResult(0);
+		resizeSearchContainer();
 
 		$(window).resize(function(){
 			resizeSearchContainer();

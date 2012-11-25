@@ -29,6 +29,11 @@ module LogsHelper
     result
   end
 
+  # Creates a sharable link to a log.
+  def log_link(log)
+    "http://www.omegrep.com"+log_path(log)
+  end
+
   # Displays a flag icon, and records the url of a log to be flagged
   def show_flag(log)
     "<i class=\"icon-flag flag-chat\" data-url=\"#{h log.url}\"></i>".html_safe
