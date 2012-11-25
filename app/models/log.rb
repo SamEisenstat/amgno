@@ -14,22 +14,17 @@ class Log < ActiveRecord::Base
     self.downvotes = 0    if downvotes.nil?
   end
 
-  # The following sucks
   @score_sql = <<END
-    upvotes - downvotes DESC
+    (CASE WHEN upvotes = 0 THEN
+      0
+    ELSE
+      (-1.96 * SQRT(upvotes*downvotes/(upvotes+downvotes) + 0.9604)
+                     + upvotes + 1.9208)
+                             /
+              (upvotes + downvotes + 3.8416)
+    END)
+    DESC
 END
-  # The following requires an SQL that supports SQRT
-  #<<END
-  #  (CASE WHEN upvotes = 0 THEN
-  #    0
-  #  ELSE
-  #    (-1.96 * SQRT(upvotes*downvotes/(upvotes+downvotes) + 0.9604)
-  #                   + upvotes + 1.9208)
-  #                           /
-  #            (upvotes + downvotes + 3.8416)
-  #  END)
-  #  DESC
-#END
 
   # Return 10 random logs
   def self.get_random(n)
