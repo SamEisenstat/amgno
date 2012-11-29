@@ -72,9 +72,12 @@ $(document).ready(function(){
 		votes.text(parseInt(votes.text()) + delta);
 		voteButton.toggleClass("pressed");
 
-		var voteType = voteButton.hasClass("up-section") ? "upvote" : "downvote";
-		$.post("votes/"+$.base64.encode(voteButton.attr('data-url'))+
-				"/"+voteType);
+		if(!voteButton.hasClass("uglyHack")) {
+			voteButton.addClass("uglyHack");
+			var voteType = voteButton.hasClass("up-section") ? "upvote" : "downvote";
+			$.post("/votes/"+$.base64.encode(voteButton.attr('data-url'))+
+					"/"+voteType);
+		}
 	}
 
 	//To make the chat url box select on click
