@@ -12,9 +12,11 @@
 <div class="wrapper">
 	<%= render "shared/navbar" %>
 	<% if @page == :top %>
-		<div id="top-page"></div>
+	    <div id="top-page"></div>
+	<% elsif single %>
+	    <div id="single-page"></div>
 	<% else %>
-		<div id="random-page"></div>
+	    <div id="random-page"></div>
 	<% end %>
 	<div class="container">
 		<% unless single %>

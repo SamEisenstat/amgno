@@ -3,10 +3,11 @@
 //lineHeight = 26; //text is 15px, linespacing is 15px, -4 cause in practice it seems more accurate
 navbarHeight = 55;
 moreLogs = true;
-var searchPage, randomPage;
+var randomPage, singlePage, searchPage, topPage;
 
 $(document).ready(function(){
 	randomPage = $("#random-page").length !== 0;
+	singlePage = $("#single-page").length !== 0;
 	searchPage = $("#search-page").length !== 0;
 	topPage    = $("#top-page")   .length !== 0;
 
@@ -96,7 +97,7 @@ $(document).ready(function(){
 	}
 
 	// The following should only run on the random page and the top page.
-	if(randomPage || topPage) {
+	if(randomPage || singlePage || topPage) {
 		$(window).scroll(function() {
 			//Gives the callbacks to the window scroll event
 			$('.controls').each(function() {
@@ -121,7 +122,9 @@ $(document).ready(function(){
 				}
 			});
 		});
+	}
 
+	if(randomPage || topPage) {
 		//Load more logs on the random page.
 		autoload($(window), function(){return $(document).height()}, 1500,
 				function(){
