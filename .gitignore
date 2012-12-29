@@ -23,4 +23,5 @@ pickle-email-*.html
 .DS_Store
 *.swo
 *.swp
-
+secret_token.rb
+production.sqlite3.bk
