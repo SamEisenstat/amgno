@@ -1,11 +1,10 @@
 <% content_for :title do %>
-	<% if @top_page %>
+	<% if @page == :top %>
 		Funny Omegle Conversations on Omegrep | Top Chats
 	<% else %>
 		Funny Omegle Conversations on Omegrep | Random Chats
 	<% end %>
 <% end %>
-
 
 <% single = @logs.length == 1 %>
 
